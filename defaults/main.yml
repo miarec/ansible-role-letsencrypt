@@ -1,0 +1,20 @@
+---
+
+# Parameters used when creating new Certbot certs
+# Both 'certbot_email' and 'certbot_domain' are required
+certbot_email: 
+certbot_domain: 
+
+certbot_create_command: >-
+  {{ certbot_script }} certonly --webroot -w /var/www/html/ --noninteractive --agree-tos
+  --email {{ certbot_email }}
+  -d {{ certbot_domain }}
+  
+# Certbot auto-renew cron job configuration (for certificate renewals).
+certbot_auto_renew: true
+certbot_auto_renew_user: "{{ ansible_user | default(lookup('env', 'USER')) }}"
+certbot_auto_renew_hour: "3"
+certbot_auto_renew_minute: "30"
+certbot_auto_renew_options: '--quiet --no-self-upgrade --post-hook "apachectl graceful"'
+
+  

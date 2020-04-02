@@ -1,0 +1,19 @@
+# {{ ansible_managed }}
+
+<IfModule mod_proxy.c>
+  ProxyPass /.well-known !
+</IfModule>
+
+Alias /.well-known/ "/var/www/html/.well-known/"
+
+<Directory "/var/www/html/.well-known">
+  Options None
+  Order allow,deny
+  Allow from all
+</Directory>
+
+<Location /.well-known/acme-challenge>
+  Options None
+  Order allow,deny
+  Allow from all
+</Location>

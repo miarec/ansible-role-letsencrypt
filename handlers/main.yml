@@ -1,0 +1,13 @@
+---
+- name: reload apache
+  service: 
+    name: "{{ apache_service }}"
+    state: reloaded
+  become: yes
+
+
+- name: reload cron
+  service: 
+    name: "{{ cron_service }}"
+    state: reloaded
+  become: yes

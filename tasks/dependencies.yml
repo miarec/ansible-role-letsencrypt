@@ -1,0 +1,63 @@
+---
+- name: install dependencies | Debian
+  package:
+    pkg: "{{ item }}"
+    update_cache: yes
+    cache_valid_time: 86400
+    state: present
+  with_items:
+    - software-properties-common
+    
+  when: ansible_os_family == "Debian"
+  
+  
+
+- name: Add certbot PPA | Debian
+  apt_repository:
+    repo: ppa:certbot/certbot
+  when: ansible_os_family == "Debian"
+  register: certbot_ppa_installed
+
+
+- name: update apt cache | Debian
+  apt: 
+    update_cache: yes 
+  when: ansible_os_family == "Debian" and certbot_ppa_installed.changed
+  
+
+- name: install EPEL repository | RedHat
+  package:
+    name: "{{ item }}"
+    state: present
+  with_items:
+    - epel-release
+
+  when: ansible_os_family == "RedHat"  
+
+  
+- name: install certbot-apache
+  package:
+    name: "{{ item }}"
+    state: present
+  with_items:
+    - python-certbot-apache
+
+    
+- name: install Apache SSL module | RedHat
+  package:
+    name: "{{ item }}"
+    state: present
+  with_items:
+    - mod_ssl
+  notify: reload apache
+  when: ansible_os_family == "RedHat"  
+  
+      
+- name: enable Apache SSL module | Debian
+  command: >
+    a2enmod ssl
+    creates=/etc/apache2/mods-enabled/ssl.load
+  notify: reload apache
+  when: ansible_os_family == "Debian"
+  
+  

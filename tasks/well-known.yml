@@ -1,0 +1,63 @@
+---
+
+# ---------------------------------------------
+# Figure out what version of Apache is installed.
+# ---------------------------------------------
+- name: Get installed version of Apache.
+  shell: "{{ apache_daemon_path }}{{ apache_daemon }} -v"
+  changed_when: false
+  check_mode: no
+  register: _apache_version
+
+## This will create full version, like 2.4.6
+- set_fact:
+    apache_version: "{{ _apache_version.stdout.split()[2].split('/')[1] }}"
+ 
+
+## Translate full apache_version (2.4.5) to the MAJOR.MINOR value, like "2.4"
+- set_fact:
+    apache_version_base: "{{ '.'.join(apache_version.split('.')[:2]) }}"
+
+    
+# --------------------------------------------------
+# Apache conf.d/letsencrypt-well-known.conf
+# --------------------------------------------------
+- name: Install letsencrypt-well-known.conf into apache conf.d directory | RedHat
+  template:
+    src: "apache-{{ apache_version_base }}-letsencrypt-well-known.conf.j2"
+    dest: "{{ apache_conf_path }}/letsencrypt-well-known.conf"
+  register: letsencrypt_well_known
+  when: ansible_os_family == "RedHat"
+
+- name: reload apache configuration | RedHat
+  service: 
+    name: "{{ apache_service }}"
+    state: reloaded
+  when: ansible_os_family == "RedHat" and letsencrypt_well_known.changed
+  become: yes
+
+  
+- name: Install letsencrypt-well-known into apache conf.d directory | Debian
+  template:
+    src: "apache-{{ apache_version_base }}-letsencrypt-well-known.conf.j2"
+    dest: "{{ apache_conf_path }}/sites-available/letsencrypt-well-known.conf"
+  when: ansible_os_family == "Debian"
+
+
+- name: a2ensite letsencrypt-well-known site | Debian
+  command: a2ensite letsencrypt-well-known
+  args:
+    creates: "{{ apache_conf_path }}/sites-enabled/letsencrypt-well-known.conf"
+  register: letsencrypt_well_known
+  when: ansible_os_family == "Debian"
+
+- name: reload apache configuration | Debian
+  service: 
+    name: "{{ apache_service }}"
+    state: reloaded
+  when: ansible_os_family == "Debian" and letsencrypt_well_known.changed
+  become: yes
+
+
+  
+  
