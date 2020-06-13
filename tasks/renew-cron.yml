@@ -3,7 +3,7 @@
   cron:
     name: Certbot automatic renewal.
     job: "{{ certbot_script }} renew {{ certbot_auto_renew_options }}"
-    minute: "{{ certbot_auto_renew_minute }}"
-    hour: "{{ certbot_auto_renew_hour }}"
+    special_time: daily
     user: "{{ certbot_auto_renew_user }}"
+    cron_file: ansible_certbot_renew
   notify: reload cron
