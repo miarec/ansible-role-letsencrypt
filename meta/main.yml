@@ -1,0 +1,23 @@
+---
+galaxy_info:
+  role_name: letsencrypt
+  author: miarec
+  description: Issue SSL certificate for Apache web server with Let's Encrypt
+  company: MiaRec, Inc.
+
+  license: MIT
+
+  min_ansible_version: "2.4"
+
+  platforms:
+    - name: EL
+      versions:
+        - all
+    - name: Ubuntu
+      versions:
+        - all
+
+  galaxy_tags:
+    - letsencrypt
+
+dependencies: []
