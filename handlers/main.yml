@@ -9,5 +9,5 @@
 - name: reload cron
   service: 
     name: "{{ cron_service }}"
-    state: reloaded
+    state: restarted
   become: yes
