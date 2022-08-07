@@ -1,5 +1,5 @@
 ---
-- name: install dependencies | Debian
+- name: install dependencies | Debian (before v.20.04)
   package:
     pkg: "{{ item }}"
     update_cache: yes
@@ -7,22 +7,27 @@
     state: present
   with_items:
     - software-properties-common
-    
-  when: ansible_os_family == "Debian"
-  
+  when: 
+    - ansible_os_family == "Debian"
+    - ansible_distribution_version is version('20.04', '<')
   
 
-- name: Add certbot PPA | Debian
+- name: Add certbot PPA | Debian (before v.20.04)
   apt_repository:
     repo: ppa:certbot/certbot
-  when: ansible_os_family == "Debian"
+  when: 
+    - ansible_os_family == "Debian"
+    - ansible_distribution_version is version('20.04', '<')
   register: certbot_ppa_installed
 
 
-- name: update apt cache | Debian
+- name: update apt cache | Debian (before v.20.04)
   apt: 
     update_cache: yes 
-  when: ansible_os_family == "Debian" and certbot_ppa_installed.changed
+  when: 
+    - ansible_os_family == "Debian" 
+    - ansible_distribution_version is version('20.04', '<')
+    - certbot_ppa_installed.changed
   
 
 - name: install EPEL repository | RedHat
@@ -34,13 +39,34 @@
 
   when: ansible_os_family == "RedHat"  
 
-  
-- name: install certbot-apache
+
+- name: install certbot-apache | RedHat
   package:
     name: "{{ item }}"
     state: present
   with_items:
     - python-certbot-apache
+  when: ansible_os_family == "RedHat"  
+  
+- name: install certbot-apache | Debian (before v20.04)
+  package:
+    name: "{{ item }}"
+    state: present
+  with_items:
+    - python-certbot-apache
+  when: 
+    - ansible_os_family == "Debian" 
+    - ansible_distribution_version is version('20.04', '<')
+
+- name: install certbot-apache | Debian (v20.04+)
+  package:
+    name: "{{ item }}"
+    state: present
+  with_items:
+    - python3-certbot-apache
+  when: 
+    - ansible_os_family == "Debian" 
+    - ansible_distribution_version is version('20.04', '>=')
 
     
 - name: install Apache SSL module | RedHat
