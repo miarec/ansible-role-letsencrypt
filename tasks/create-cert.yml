@@ -50,6 +50,3 @@
     creates: "{{ apache_conf_path }}/sites-enabled/default-ssl.conf"
   notify: reload apache
   when: ansible_os_family == "Debian"
-
-  
-
