@@ -1,6 +1,10 @@
 ---
 
 certbot_dir: "/opt/certbot"
+certbot_venv: "venv"
+
+# this should be passed form the prpare-hosts.yml or something to make this dynamic
+python_venv_command: "/usr/local/bin/pyvenv-3.6"
 
 # Parameters used when creating new Certbot certs
 # Both 'certbot_email' and 'certbot_domain' are required

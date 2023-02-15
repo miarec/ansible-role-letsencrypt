@@ -15,12 +15,12 @@
     group: "centos"
     mode: 0755
 
-- name: Update PIP
+- name: Create and prepare python virtual environment for certbot
   pip:
     name: "{{ item }}"
     state: latest
-    virtualenv: "{{ certbot_dir }}/venv"
-    virtualenv_python: python3
+    virtualenv: "{{ certbot_dir }}/{{ certbot_venv }}"
+    virtualenv_command: "{{ python_venv_command }}"
   with_items:
     - pip
     - wheel
@@ -29,8 +29,9 @@
   pip:
     name: "{{ item }}"
     state: present
-    virtualenv: "{{ certbot_dir }}/venv"
-    virtualenv_python: python3
+    virtualenv: "{{ certbot_dir }}/{{ certbot_venv }}"
+    virtualenv_command: "{{ python_venv_command }}"
+
   with_items:
     - certbot-apache
     - certbot-dns-route53
