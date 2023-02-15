@@ -9,10 +9,10 @@
 
 - name: check for certbot_domain variable
   fail:
-    msg: Parameters 'certbot_domain' and 'certbot_email' must be provided.
+    msg: Parameters 'certbot_domain' must be provided.
   when: not certbot_domain
 
 - name: check for certbot_email variable
   fail:
-    msg: Parameters 'certbot_domain' and 'certbot_email' must be provided.
+    msg: Parameters 'certbot_email' must be provided.
   when: not certbot_email
