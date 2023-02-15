@@ -1,15 +1,19 @@
 ---
 - import_tasks: include-vars.yml
 
-- import_tasks: dependencies.yml
-  become: yes
+# udpate apt_cache??
 
-- import_tasks: well-known.yml
-  become: yes  
-  
-- import_tasks: create-cert.yml
-  become: yes
+- import_tasks: install-certbot.yml
 
-- import_tasks: renew-cron.yml
-  when: certbot_auto_renew
-  become: yes
+# - import_tasks: dependencies.yml
+#   become: yes
+
+# - import_tasks: well-known.yml
+#   become: yes
+
+# - import_tasks: create-cert.yml
+#   become: yes
+
+# - import_tasks: renew-cron.yml
+#   when: certbot_auto_renew
+#   become: yes

@@ -1,0 +1,36 @@
+---
+- name: install Dependencies
+  package:
+    name: "{{ item }}"
+    state: present
+  with_items:
+    - "{{ dependencies }}"
+
+# should there be a certbot user ????? probbaly
+- name: Create Certbot directory
+  file:
+    path: "{{ certbot_dir }}"
+    state: directory
+    owner: "centos"
+    group: "centos"
+    mode: 0755
+
+- name: Update PIP
+  pip:
+    name: "{{ item }}"
+    state: latest
+    virtualenv: "{{ certbot_dir }}/venv"
+    virtualenv_python: python3
+  with_items:
+    - pip
+    - wheel
+
+- name: Install certbot
+  pip:
+    name: "{{ item }}"
+    state: present
+    virtualenv: "{{ certbot_dir }}/venv"
+    virtualenv_python: python3
+  with_items:
+    - certbot-apache
+    - certbot-dns-route53

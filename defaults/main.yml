@@ -1,15 +1,17 @@
 ---
 
+certbot_dir: "/opt/certbot"
+
 # Parameters used when creating new Certbot certs
 # Both 'certbot_email' and 'certbot_domain' are required
-certbot_email: 
-certbot_domain: 
+certbot_email:
+certbot_domain:
 
 certbot_create_command: >-
   {{ certbot_script }} certonly --webroot -w /var/www/html/ --noninteractive --agree-tos
   --email {{ certbot_email }}
   -d {{ certbot_domain }}
-  
+
 # Certbot auto-renew cron job configuration (for certificate renewals).
 certbot_auto_renew: true
 certbot_auto_renew_user: "root"
