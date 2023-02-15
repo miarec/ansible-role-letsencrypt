@@ -31,7 +31,6 @@
     state: present
     virtualenv: "{{ certbot_dir }}/{{ certbot_venv }}"
     virtualenv_command: "{{ python_venv_command }}"
-
   with_items:
     - certbot-apache
     - certbot-dns-route53

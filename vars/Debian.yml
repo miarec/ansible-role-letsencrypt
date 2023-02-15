@@ -13,4 +13,4 @@ apache_conf_path: /etc/apache2
 
 cron_service: cron
 
-certbot_script: certbot
+# certbot_script: certbot
