@@ -1,14 +1,37 @@
 ---
-- name: Check if certificate already exists.
+- name: Check if individual certificate exists.
   stat:
     path: /etc/letsencrypt/live/{{ certbot_domain }}/cert.pem
   register: letsencrypt_cert
 
-  
-- name: Generate new certificate if one doesn't exist.
+
+- name: Generate new individual certificate if one doesn't exist.
   command: "{{ certbot_create_command }}"
   when: not letsencrypt_cert.stat.exists
 
+
+# - name: Check if shared certificate exists.
+#   stat:
+#     path: /etc/letsencrypt/live/{{ certbot_shared_domain }}/cert.pem
+#   register: letsencrypt_cert_shared
+#   when: certbot_shared_domain is defined
+
+
+- name: Generate new shared certificate if one doesn't exist.
+  # command: "{{ certbot_shared_create_command }}"
+  command: >-
+    {{ certbot_script }} certonly
+    --dns-route53
+    --dns-route53-propagation-seconds 30
+    -d {{ item }}
+  with_items: "{{ certbot_shared_domain }}"
+  when:
+   - certbot_shared_domain is defined
+  #  - not letsencrypt_cert_shared.stat.exists
+
+# ToDO
+# should we do the same with the shared domain
+# make Configure Apache step able to do Debian and redhat
 
 - name: Configure Apache | RedHat
   lineinfile:
@@ -43,10 +66,34 @@
   notify: reload apache
   when: ansible_os_family == "Debian"
 
-  
+
 - name: a2ensite default-ssl site | Debian
   command: a2ensite default-ssl
   args:
     creates: "{{ apache_conf_path }}/sites-enabled/default-ssl.conf"
   notify: reload apache
   when: ansible_os_family == "Debian"
+
+
+- name: Create shared domain ssl conf file
+  template:
+    src: shared-ssl.conf.j2
+    dest: "{{ apache_conf_path }}/shared-ssl.conf"
+  when: certbot_shared_domain is defined
+
+
+# Insert Include statement in apache config
+
+- name: Add shared domain ssl conf file to apache config
+  lineinfile:
+    path: "{{ apache_conf_path }}/ssl.conf"
+    state: present
+    line: "Include /etc/httpd/conf.d/shared-ssl.conf"
+  when: certbot_shared_domain is defined
+
+- name: Remove shared domain ssl conf file from apache config
+  lineinfile:
+    path: "{{ apache_conf_path }}/ssl.conf"
+    state: absent
+    line: "Include /etc/httpd/conf.d/shared-ssl.conf"
+  when: certbot_shared_domain is not defined

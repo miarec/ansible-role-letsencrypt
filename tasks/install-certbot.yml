@@ -25,6 +25,7 @@
     - pip
     - wheel
 
+# The items should be variable based on DNS provider
 - name: Install certbot
   pip:
     name: "{{ item }}"

@@ -11,12 +11,23 @@ python_venv_command: "/usr/local/bin/pyvenv-3.6"
 certbot_email:
 certbot_domain:
 
+
+# certbot_shared_domain:  shared.example.com
+# This should be defined if a wildcard or shared certificate is needed
+
 certbot_script: "{{ certbot_dir }}/{{ certbot_venv }}/bin/certbot"
 
 certbot_create_command: >-
   {{ certbot_script }} certonly --webroot -w /var/www/html/ --noninteractive --agree-tos
   --email {{ certbot_email }}
   -d {{ certbot_domain }}
+
+# this should be dynamic based on DNS provider, not needed for now
+certbot_shared_create_command: >-
+  {{ certbot_script }} certonly
+  --dns-route53
+  --dns-route53-propagation-seconds 30
+  -d {{ certbot_domain_shared }}
 
 # Certbot auto-renew cron job configuration (for certificate renewals).
 certbot_auto_renew: true
