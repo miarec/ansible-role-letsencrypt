@@ -54,38 +54,38 @@
 # should we do the same with the shared domain??
 # make Configure Apache step able to do Debian and redhat
 
-- name: Configure Apache | RedHat
-  lineinfile:
-    dest: "{{ apache_conf_path }}/ssl.conf"
-    regexp: "{{ item.regexp }}"
-    line: "{{ item.line }}"
-  with_items:
-    - regexp: '^SSLCertificateFile '
-      line: 'SSLCertificateFile /etc/letsencrypt/live/{{ certbot_domain }}/cert.pem'
-    - regexp: '^SSLCertificateKeyFile '
-      line: 'SSLCertificateKeyFile /etc/letsencrypt/live/{{ certbot_domain }}/privkey.pem'
-    - regexp: '^#?SSLCertificateChainFile '
-      line: 'SSLCertificateChainFile /etc/letsencrypt/live/{{ certbot_domain }}/chain.pem'
+# - name: Configure Apache | RedHat
+#   lineinfile:
+#     dest: "{{ apache_conf_path }}/ssl.conf"
+#     regexp: "{{ item.regexp }}"
+#     line: "{{ item.line }}"
+#   with_items:
+#     - regexp: '^SSLCertificateFile '
+#       line: 'SSLCertificateFile /etc/letsencrypt/live/{{ certbot_domain }}/cert.pem'
+#     - regexp: '^SSLCertificateKeyFile '
+#       line: 'SSLCertificateKeyFile /etc/letsencrypt/live/{{ certbot_domain }}/privkey.pem'
+#     - regexp: '^#?SSLCertificateChainFile '
+#       line: 'SSLCertificateChainFile /etc/letsencrypt/live/{{ certbot_domain }}/chain.pem'
 
-  notify: reload apache
-  when: ansible_os_family == "RedHat"
+#   notify: reload apache
+#   when: ansible_os_family == "RedHat"
 
 
-- name: Configure Apache | Debian
-  lineinfile:
-    dest: "{{ apache_conf_path }}/sites-available/default-ssl.conf"
-    regexp: "{{ item.regexp }}"
-    line: "{{ item.line }}"
-  with_items:
-    - regexp: '^\s*SSLCertificateFile\s+/etc/'
-      line: 'SSLCertificateFile /etc/letsencrypt/live/{{ certbot_domain }}/cert.pem'
-    - regexp: '^\s*SSLCertificateKeyFile\s+/etc/'
-      line: 'SSLCertificateKeyFile /etc/letsencrypt/live/{{ certbot_domain }}/privkey.pem'
-    - regexp: '^\s*#?\s*SSLCertificateChainFile\s+/etc/'
-      line: 'SSLCertificateChainFile /etc/letsencrypt/live/{{ certbot_domain }}/chain.pem'
+# - name: Configure Apache | Debian
+#   lineinfile:
+#     dest: "{{ apache_conf_path }}/sites-available/default-ssl.conf"
+#     regexp: "{{ item.regexp }}"
+#     line: "{{ item.line }}"
+#   with_items:
+#     - regexp: '^\s*SSLCertificateFile\s+/etc/'
+#       line: 'SSLCertificateFile /etc/letsencrypt/live/{{ certbot_domain }}/cert.pem'
+#     - regexp: '^\s*SSLCertificateKeyFile\s+/etc/'
+#       line: 'SSLCertificateKeyFile /etc/letsencrypt/live/{{ certbot_domain }}/privkey.pem'
+#     - regexp: '^\s*#?\s*SSLCertificateChainFile\s+/etc/'
+#       line: 'SSLCertificateChainFile /etc/letsencrypt/live/{{ certbot_domain }}/chain.pem'
 
-  notify: reload apache
-  when: ansible_os_family == "Debian"
+#   notify: reload apache
+#   when: ansible_os_family == "Debian"
 
 
 - name: a2ensite default-ssl site | Debian
@@ -96,25 +96,34 @@
   when: ansible_os_family == "Debian"
 
 
-- name: Create shared domain ssl conf file
+
+# make this work for Debian different path???
+# only do this for certs that are generated, not listed like if previous steps fail ? maybe
+- name: Create ssl.conf file per domain
   template:
-    src: shared-ssl.conf.j2
-    dest: "{{ apache_conf_path }}/shared-ssl.conf"
-  when: certbot_shared_domains is defined
+    src: domain-ssl.conf.j2
+    dest: "{{ apache_conf_path }}/vhost_{{ item }}-ssl.conf"
+  with_items:
+    - "{{ certbot_domain }}"
+    - "{{ certbot_shared_domains }}"
+  # when: certbot_shared_domains is defined
   notify: reload apache
 
-- name: Add shared domain ssl conf file to apache config
-  lineinfile:
-    path: "{{ apache_conf_path }}/ssl.conf"
-    state: present
-    line: "Include /etc/httpd/conf.d/shared-ssl.conf"
-  when: certbot_shared_domains is defined
-  notify: reload apache
 
-- name: Remove shared domain ssl conf file from apache config
-  lineinfile:
-    path: "{{ apache_conf_path }}/ssl.conf"
-    state: absent
-    line: "Include /etc/httpd/conf.d/shared-ssl.conf"
-  when: certbot_shared_domains is not defined
-  notify: reload apache
+
+# ## Remove this,    file is loaded from httdpd.conf
+# - name: Add shared domain ssl conf file to apache config
+#   lineinfile:
+#     path: "{{ apache_conf_path }}/ssl.conf"
+#     state: present
+#     line: "Include /etc/httpd/conf.d/shared-ssl.conf"
+#   when: certbot_shared_domains is defined
+#   notify: reload apache
+
+# - name: Remove shared domain ssl conf file from apache config
+#   lineinfile:
+#     path: "{{ apache_conf_path }}/ssl.conf"
+#     state: absent
+#     line: "Include /etc/httpd/conf.d/shared-ssl.conf"
+#   when: certbot_shared_domains is not defined
+#   notify: reload apache

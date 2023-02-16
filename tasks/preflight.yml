@@ -16,3 +16,6 @@
   fail:
     msg: Parameters 'certbot_email' must be provided.
   when: not certbot_email
+
+
+## Do a which python3 to get link of install python 3
