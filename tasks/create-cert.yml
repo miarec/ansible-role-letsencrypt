@@ -35,11 +35,14 @@
 #    - not letsencrypt_cert_shared.new.timothylytle.miarecdev.net.stat.exists
 
 - name: Generate new shared certificates if they do not exist.
+  # command: >-
+  #   {{ certbot_script }} certonly
+  #   --dns-route53
+  #   --dns-route53-propagation-seconds 30
+  #   -d {{ item.item }}
   command: >-
-    {{ certbot_script }} certonly
-    --dns-route53
-    --dns-route53-propagation-seconds 30
-    -d {{ item.item }}
+      {{ certbot_create_route53_command }}
+      -d {{ item.item }}
   loop: "{{ letsencrypt_cert_shared.results }}"
   when:
    - certbot_shared_domains is defined
@@ -48,7 +51,7 @@
 
 
 # ToDO
-# should we do the same with the shared domain
+# should we do the same with the shared domain??
 # make Configure Apache step able to do Debian and redhat
 
 - name: Configure Apache | RedHat
