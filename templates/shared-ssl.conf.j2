@@ -2,7 +2,7 @@
 # This creates a virtual host config for each FQDN applied
 # that is shared with another server
 
-{% for item in certbot_shared_domain %}
+{% for item in certbot_shared_domains %}
 <VirtualHost _default_:443>
 
 ServerName {{ item }}
