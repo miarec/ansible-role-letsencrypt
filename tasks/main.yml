@@ -12,8 +12,13 @@
 - import_tasks: well-known.yml
   become: yes
 
-- import_tasks: create-cert.yml
+- import_tasks: create-cert-webroot.yml
   become: yes
+  when: certbot_method == 'webroot'
+
+- import_tasks: create-cert-dns-route53.yml
+  become: yes
+  when: certbot_method == 'dns-route53'
 
 - import_tasks: renew-cron.yml
   when: certbot_auto_renew

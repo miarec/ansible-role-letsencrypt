@@ -1,0 +1,26 @@
+---
+- name: Check if certificates exists.
+  stat:
+    path: /etc/letsencrypt/live/{{ item }}/cert.pem
+  register: letsencrypt_certs
+  with_items: "{{ certbot_domains }}"
+
+- name: Generate new certificates if they do not exist | DNS-Route53
+  command: >-
+      {{ certbot_script }} certonly
+      --dns-route53
+      --dns-route53-propagation-seconds 30
+      -d {{ item.item }}
+  loop: "{{ letsencrypt_certs.results }}"
+  when:
+   - not item.stat.exists
+
+# only do this for certs that are generated, not listed like if previous steps fail ? maybe
+- name: Create ssl.conf file per domain
+  template:
+    src: domain-ssl.conf.j2
+    dest: "{{ apache_conf_path }}/vhost_{{ item }}-ssl.conf"
+  with_items:
+    - "{{ certbot_domains }}"
+  notify: reload apache
+

@@ -7,10 +7,10 @@ certbot_venv: "venv"
 python_venv_command: "/usr/local/bin/pyvenv-3.6"
 
 # Parameters used when creating new Certbot certs
-# Both 'certbot_email' and 'certbot_domain' are required
+# Both 'certbot_email' and 'certbot_domains' are required
 certbot_email:
-certbot_domain:
-
+# certbot_domain:
+certbot_domains:
 
 # certbot_shared_domains:
 #  - shared.example.com
@@ -19,19 +19,27 @@ certbot_domain:
 
 certbot_script: "{{ certbot_dir }}/{{ certbot_venv }}/bin/certbot"
 
-certbot_create_command: >-
-  {{ certbot_script }} certonly --webroot -w /var/www/html/ --noninteractive --agree-tos
-  --email {{ certbot_email }}
-  -d {{ certbot_domain }}
+# webroot_command: >-
+#   {{ certbot_script }} certonly
+#   --webroot
+#   -w /var/www/html/
+#   --noninteractive
+#   --agree-tos
+#   --email {{ certbot_email }}
 
 # this should be dynamic based on DNS provider, not needed for now
-certbot_create_route53_command: >-
-  {{ certbot_script }} certonly
-  --dns-route53
-  --dns-route53-propagation-seconds 30
+# route53_command: >-
+#   {{ certbot_script }} certonly
+#   --dns-route53
+#   --dns-route53-propagation-seconds 30
 
 
 # Certbot auto-renew cron job configuration (for certificate renewals).
 certbot_auto_renew: true
 certbot_auto_renew_user: "root"
 certbot_auto_renew_options: '--quiet --no-self-upgrade --post-hook "apachectl graceful"'
+
+
+certbot_python: python3
+
+certbot_method: dns-route53
