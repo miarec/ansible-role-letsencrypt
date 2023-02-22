@@ -1,45 +1,34 @@
 ---
-
+# Certbot install options
+certbot_user: "certbot"
+certbot_group: "{{ certbot_user }}"
 certbot_dir: "/opt/certbot"
 certbot_venv: "venv"
+certbot_python_dependencies:
+  - wheel
+
 
 # this should be passed form the prpare-hosts.yml or something to make this dynamic
-python_venv_command: "/usr/local/bin/pyvenv-3.6"
+# python_venv_command: "/usr/local/bin/pyvenv-3.6"
+
+
 
 # Parameters used when creating new Certbot certs
 # Both 'certbot_email' and 'certbot_domains' are required
 certbot_email:
-# certbot_domain:
 certbot_domains:
-
-# certbot_shared_domains:
-#  - shared.example.com
-#  - othershared.example.com
-# This should be defined if a wildcard or shared certificate is needed
 
 certbot_script: "{{ certbot_dir }}/{{ certbot_venv }}/bin/certbot"
 
-# webroot_command: >-
-#   {{ certbot_script }} certonly
-#   --webroot
-#   -w /var/www/html/
-#   --noninteractive
-#   --agree-tos
-#   --email {{ certbot_email }}
-
-# this should be dynamic based on DNS provider, not needed for now
-# route53_command: >-
-#   {{ certbot_script }} certonly
-#   --dns-route53
-#   --dns-route53-propagation-seconds 30
-
-
 # Certbot auto-renew cron job configuration (for certificate renewals).
 certbot_auto_renew: true
-certbot_auto_renew_user: "root"
+# certbot_auto_renew_user: "root"
+certbot_auto_renew_user: "{{ certbot_user }}"
 certbot_auto_renew_options: '--quiet --no-self-upgrade --post-hook "apachectl graceful"'
 
 
 certbot_python: python3
 
 certbot_method: dns-route53
+
+

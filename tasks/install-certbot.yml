@@ -1,39 +1,66 @@
 ---
-- name: install Dependencies
+- name: install package dependencies.
   package:
     name: "{{ item }}"
     state: present
   with_items:
     - "{{ dependencies }}"
 
-# should there be a certbot user ????? probbaly
+- name: Create the certbot group
+  group:
+    name: "{{ certbot_group }}"
+    state: present
+    system: true
+  when:
+    - certbot_group != "root"
+
+- name: Create the certbot user
+  user:
+    name: "{{ certbot_user }}"
+    groups: "{{ certbot_group }}"
+    append: true
+    shell: /usr/sbin/nologin
+    system: true
+    createhome: false
+    home: /
+  when:
+    - certbot_user != "root"
+
 - name: Create Certbot directory
   file:
     path: "{{ certbot_dir }}"
     state: directory
-    owner: "centos"
-    group: "centos"
+    owner: "{{ certbot_user }}"
+    group: "{{ certbot_group }}"
     mode: 0755
 
-- name: Create and prepare python virtual environment for certbot
+- name: Upgrade PIP and create python virtual environment for certbot
   pip:
-    name: "{{ item }}"
+    name: pip
     state: latest
     virtualenv: "{{ certbot_dir }}/{{ certbot_venv }}"
-    # virtualenv_command: "{{ python_venv_command }}"
-    virtualenv_command: "{{ python_path.stdout }} -m venv"
-  with_items:
-    - pip
-    - wheel
+    virtualenv_command: "{{ _python_path.stdout }} -m venv"
+
+- name: Install ython dependencies
+  pip:
+    name: "{{ certbot_python_dependencies }}"
+    state: latest
+    virtualenv: "{{ certbot_dir }}/{{ certbot_venv }}"
+    virtualenv_command: "{{ _python_path.stdout }} -m venv"
+  # with_items:
+  #   - pip
+  #   - wheel
 
 # The items should be variable based on DNS provider
-- name: Install certbot
+- name: Install certbot and plugins
   pip:
-    name: "{{ item }}"
+    # name: "{{ item }}"
+    name:
+      - certbot-apache
+      - certbot-dns-route53
     state: present
     virtualenv: "{{ certbot_dir }}/{{ certbot_venv }}"
-    # virtualenv_command: "{{ python_venv_command }}"
-    virtualenv_command: "{{ python_path.stdout }} -m venv"
-  with_items:
-    - certbot-apache
-    - certbot-dns-route53
+    virtualenv_command: "{{ _python_path.stdout }} -m venv"
+  # with_items:
+  #   - certbot-apache
+  #   - certbot-dns-route53

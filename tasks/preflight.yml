@@ -7,11 +7,6 @@
     - "{{ ansible_os_family }}.yml"
     - "default.yml"
 
-# - name: check for certbot_domain variable
-#   fail:
-#     msg: Parameters 'certbot_domain' must be provided.
-#   when: not certbot_domain
-
 - name: check for certbot_domains variable
   fail:
     msg: Parameters 'certbot_domains' must be provided.
@@ -24,10 +19,5 @@
 
 - name: Find path for specified python version
   command: "which {{ certbot_python }}"
-  register: python_path
+  register: _python_path
   changed_when: false
-  # ignore_errors: true
-
-# - name: print
-#   debug:
-#     var: python_path.stdout

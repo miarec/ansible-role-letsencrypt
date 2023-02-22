@@ -1,59 +1,11 @@
 ---
-# - name: Check if individual certificate exists.
-#   stat:
-#     path: /etc/letsencrypt/live/{{ certbot_domain }}/cert.pem
-#   register: letsencrypt_cert
-
-
-# - name: Generate new individual certificate if one doesn't exist.
-#   command: "{{ certbot_create_command }}"
-#   when: not letsencrypt_cert.stat.exists
-
-
-# - name: Check if shared certificates exists.
-#   stat:
-#     path: /etc/letsencrypt/live/{{ item }}/cert.pem
-#   register: letsencrypt_cert_shared
-#   with_items: "{{ certbot_shared_domains }}"
-#   when: certbot_shared_domains is defined
-
-- name: Check if certificates exists.
+- name: Check if certificates exists. | Webroot
   stat:
     path: /etc/letsencrypt/live/{{ item }}/cert.pem
-  register: letsencrypt_certs
+  register: _letsencrypt_certs
   with_items: "{{ certbot_domains }}"
-  # when: certbot_shared_domains is defined
 
-# - name: Print value
-#   debug:
-#     var: letsencrypt_cert_shared
-
-
-# - name: Generate new shared certificates if they do not exist.
-#   # command: "{{ certbot_shared_create_command }}"
-#   command: >-
-#     {{ certbot_script }} certonly
-#     --dns-route53
-#     --dns-route53-propagation-seconds 30
-#     -d {{ item }}
-#   with_items: "{{ certbot_shared_domains }}"
-#   when:
-#    - certbot_shared_domains is defined
-#    - not letsencrypt_cert_shared.new.timothylytle.miarecdev.net.stat.exists
-
-# - name: Generate new shared certificates if they do not exist.
-#   command: >-
-#       {{ certbot_create_route53_command }}
-#       -d {{ item.item }}
-#   loop: "{{ letsencrypt_cert_shared.results }}"
-#   when:
-#    - certbot_shared_domains is defined
-#    - not item.stat.exists
-
-
-
-
-- name: Generate new certificates if they do not exist.
+- name: Generate new certificates if they do not exist. | Webroot
   command: >-
     {{ certbot_script }} certonly
     --webroot
@@ -62,36 +14,16 @@
     --agree-tos
     --email {{ certbot_email }}
     -d {{ item.item }}
-  loop: "{{ letsencrypt_certs.results }}"
+  loop: "{{ _letsencrypt_certs.results }}"
   when:
    - not item.stat.exists
 
-
-# ToDO
-# should we do the same with the shared domain??
-# make Configure Apache step able to do Debian and redhat
-
-
-# I dont think this is needed,   mod_ssl is enable during install of miareweb
-# Verify this
-# - name: a2ensite default-ssl site | Debian
-#   command: a2ensite default-ssl
-#   args:
-#     creates: "{{ apache_conf_path }}/sites-enabled/default-ssl.conf"
-#   notify: reload apache
-#   when: ansible_os_family == "Debian"
-
-
-
-# make this work for Debian different path???
 # only do this for certs that are generated, not listed like if previous steps fail ? maybe
-- name: Create ssl.conf file per domain
+- name: Create ssl.conf file per domain | Webroot
   template:
     src: domain-ssl.conf.j2
     dest: "{{ apache_conf_path }}/vhost_{{ item }}-ssl.conf"
   with_items:
-    # - "{{ certbot_domain }}"
-    # - "{{ certbot_shared_domains }}"
     - "{{ certbot_domains }}"
   notify: reload apache
 
