@@ -18,7 +18,6 @@
   when:
    - not item.stat.exists
 
-# only do this for certs that are generated, not listed like if previous steps fail ? maybe
 - name: Create ssl.conf file per domain | Webroot
   template:
     src: domain-ssl.conf.j2

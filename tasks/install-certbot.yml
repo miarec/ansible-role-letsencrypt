@@ -41,14 +41,13 @@
     virtualenv: "{{ certbot_dir }}/{{ certbot_venv }}"
     virtualenv_command: "{{ _python_path.stdout }} -m venv"
 
-- name: Install ython dependencies
+- name: Install python dependencies
   pip:
     name: "{{ certbot_python_dependencies }}"
     state: latest
     virtualenv: "{{ certbot_dir }}/{{ certbot_venv }}"
     virtualenv_command: "{{ _python_path.stdout }} -m venv"
 
-# TODO The items should be variable based on DNS provider
 - name: Install certbot and plugins
   pip:
     name:

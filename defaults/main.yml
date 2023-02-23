@@ -9,13 +9,9 @@ certbot_python_dependencies:
   - wheel
 
 
-# this should be passed form the prpare-hosts.yml or something to make this dynamic
-# python_venv_command: "/usr/local/bin/pyvenv-3.6"
-
-
-
 # Parameters used when creating new Certbot certs
 # Both 'certbot_email' and 'certbot_domains' are required
+certbot_method: webroot
 certbot_email:
 certbot_domains:
 
@@ -23,13 +19,5 @@ certbot_script: "{{ certbot_dir }}/{{ certbot_venv }}/bin/certbot"
 
 # Certbot auto-renew cron job configuration (for certificate renewals).
 certbot_auto_renew: true
-# certbot_auto_renew_user: "root"
-certbot_auto_renew_user: "{{ certbot_user }}"
+certbot_auto_renew_user: "root"
 certbot_auto_renew_options: '--quiet --no-self-upgrade --post-hook "apachectl graceful"'
-
-
-
-
-certbot_method: webroot
-
-
