@@ -47,20 +47,13 @@
     state: latest
     virtualenv: "{{ certbot_dir }}/{{ certbot_venv }}"
     virtualenv_command: "{{ _python_path.stdout }} -m venv"
-  # with_items:
-  #   - pip
-  #   - wheel
 
-# The items should be variable based on DNS provider
+# TODO The items should be variable based on DNS provider
 - name: Install certbot and plugins
   pip:
-    # name: "{{ item }}"
     name:
       - certbot-apache
       - certbot-dns-route53
     state: present
     virtualenv: "{{ certbot_dir }}/{{ certbot_venv }}"
     virtualenv_command: "{{ _python_path.stdout }} -m venv"
-  # with_items:
-  #   - certbot-apache
-  #   - certbot-dns-route53

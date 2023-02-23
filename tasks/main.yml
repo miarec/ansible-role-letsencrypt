@@ -1,13 +1,12 @@
 ---
 - import_tasks: preflight.yml
 
-# udpate apt_cache??
-
 - import_tasks: install-certbot.yml
   become: true
 
 - import_tasks: well-known.yml
   become: yes
+  when: certbot_method == 'webroot'
 
 - import_tasks: create-cert-webroot.yml
   become: yes

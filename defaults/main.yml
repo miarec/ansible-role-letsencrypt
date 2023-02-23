@@ -1,5 +1,6 @@
 ---
 # Certbot install options
+certbot_python: python3
 certbot_user: "certbot"
 certbot_group: "{{ certbot_user }}"
 certbot_dir: "/opt/certbot"
@@ -27,8 +28,8 @@ certbot_auto_renew_user: "{{ certbot_user }}"
 certbot_auto_renew_options: '--quiet --no-self-upgrade --post-hook "apachectl graceful"'
 
 
-certbot_python: python3
 
-certbot_method: dns-route53
+
+certbot_method: webroot
 
 
