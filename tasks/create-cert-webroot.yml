@@ -15,8 +15,7 @@
     --email {{ certbot_email }}
     -d {{ item.item }}
   loop: "{{ _letsencrypt_certs.results }}"
-  when:
-   - not item.stat.exists
+  when: not item.stat.exists
 
 - name: Create ssl.conf file per domain | Webroot
   template:
@@ -25,4 +24,3 @@
   with_items:
     - "{{ certbot_domains }}"
   notify: reload apache
-

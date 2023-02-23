@@ -5,7 +5,7 @@
 - name: Get installed version of Apache.
   shell: "{{ apache_daemon_path }}{{ apache_daemon }} -v"
   changed_when: false
-  check_mode: no
+  check_mode: false
   register: _apache_version
 
 ## This will create full version, like 2.4.6
@@ -31,4 +31,4 @@
     name: "{{ apache_service }}"
     state: reloaded
   when: _letsencrypt_well_known.changed
-  become: yes
+  become: true

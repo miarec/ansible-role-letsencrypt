@@ -8,4 +8,3 @@ apache_daemon_path: /usr/sbin/
 apache_conf_path: /etc/httpd/conf.d
 
 cron_service: crond
-

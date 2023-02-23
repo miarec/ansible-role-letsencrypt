@@ -5,17 +5,17 @@
   become: true
 
 - import_tasks: well-known.yml
-  become: yes
+  become: true
   when: certbot_method == 'webroot'
 
 - import_tasks: create-cert-webroot.yml
-  become: yes
+  become: true
   when: certbot_method == 'webroot'
 
 - import_tasks: create-cert-dns-route53.yml
-  become: yes
+  become: true
   when: certbot_method == 'dns-route53'
 
 - import_tasks: renew-cron.yml
   when: certbot_auto_renew
-  become: yes
+  become: true
