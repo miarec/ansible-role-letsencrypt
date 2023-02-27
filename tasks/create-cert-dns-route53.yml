@@ -17,10 +17,3 @@
   loop: "{{ _letsencrypt_certs.results }}"
   when: not item.stat.exists
 
-- name: Create ssl.conf file per domain | DNS-Route53
-  template:
-    src: domain-ssl.conf.j2
-    dest: "{{ apache_conf_path }}/vhost_{{ item }}-ssl.conf"
-  with_items:
-    - "{{ certbot_domains }}"
-  notify: reload apache

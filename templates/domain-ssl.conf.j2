@@ -15,9 +15,9 @@ LogLevel warn
 SSLEngine on
 SSLProtocol all -SSLv2 -SSLv3
 SSLCipherSuite HIGH:3DES:!aNULL:!MD5:!SEED:!IDEA
-SSLCertificateFile /etc/letsencrypt/live/{{ item }}/cert.pem
-SSLCertificateKeyFile /etc/letsencrypt/live/{{ item }}/privkey.pem
-SSLCertificateChainFile /etc/letsencrypt/live/{{ item }}/chain.pem
+SSLCertificateFile {{ cerbot_work_dir }}/live/{{ item }}/cert.pem
+SSLCertificateKeyFile {{ cerbot_work_dir }}/live/{{ item }}/privkey.pem
+SSLCertificateChainFile {{ cerbot_work_dir }}/live/{{ item }}/chain.pem
 
 CustomLog logs/ssl_request_log \
           "%t %h %{SSL_PROTOCOL}x %{SSL_CIPHER}x \"%r\" %b"

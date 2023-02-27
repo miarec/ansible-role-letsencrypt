@@ -1,0 +1,42 @@
+---
+- name: install package dependencies.
+  package:
+    name: "{{ item }}"
+    state: present
+  with_items:
+    - "{{ dependencies }}"
+
+- name: Create the certbot group
+  group:
+    name: "{{ certbot_group }}"
+    state: present
+    system: true
+  when:
+    - certbot_group != "root"
+
+- name: Create the certbot user
+  user:
+    name: "{{ certbot_user }}"
+    groups: "{{ certbot_group }}"
+    append: true
+    shell: /usr/sbin/nologin
+    system: true
+    createhome: false
+    home: /
+  when:
+    - certbot_user != "root"
+
+- name: Create Certbot directories
+  file:
+    path: "{{ item }}"
+    state: directory
+    owner: "{{ certbot_user }}"
+    group: "{{ certbot_group }}"
+    mode: 0755
+  with_items:
+    - "{{ cerbot_work_dir }}"
+    - "{{ certbot_log_dir }}"
+    - "{{ certbot_config_dir }}"
+    - "{{ certbot_bin_dir }}"
+
+

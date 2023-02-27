@@ -1,9 +1,13 @@
 ---
 # Certbot install options
 certbot_python: python3
-certbot_user: "certbot"
+certbot_user: certbot
 certbot_group: "{{ certbot_user }}"
-certbot_dir: "/opt/certbot"
+
+cerbot_work_dir: "/etc/letsencrypt"
+certbot_log_dir: "/var/log/letsencrypt"
+certbot_config_dir: "/var/lib/letsencrypt"
+certbot_bin_dir: "/opt/certbot"
 certbot_venv: "venv"
 certbot_python_dependencies:
   - wheel
@@ -15,9 +19,9 @@ certbot_method: webroot
 certbot_email:
 certbot_domains:
 
-certbot_script: "{{ certbot_dir }}/{{ certbot_venv }}/bin/certbot"
+certbot_script: "{{ certbot_bin_dir }}/{{ certbot_venv }}/bin/certbot"
 
 # Certbot auto-renew cron job configuration (for certificate renewals).
 certbot_auto_renew: true
-certbot_auto_renew_user: "root"
+certbot_auto_renew_user: "{{ certbot_user }}"
 certbot_auto_renew_options: '--quiet --no-self-upgrade --post-hook "apachectl graceful"'
