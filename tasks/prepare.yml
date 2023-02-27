@@ -38,5 +38,3 @@
     - "{{ certbot_log_dir }}"
     - "{{ certbot_config_dir }}"
     - "{{ certbot_bin_dir }}"
-
-
