@@ -1,6 +1,7 @@
 ---
 dependencies:
-  - augeas
+ - python3-venv
+ - libaugeas0
 
 apache_service: apache2
 apache_daemon: apache2
