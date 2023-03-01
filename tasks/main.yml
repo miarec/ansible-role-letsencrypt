@@ -24,6 +24,7 @@
 
 - import_tasks: modify_apache.yml
   become: true
+  when: certbot_modify_apache
 
 - import_tasks: renew-cron.yml
   become: true
