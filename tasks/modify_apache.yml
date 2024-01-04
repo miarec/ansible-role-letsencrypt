@@ -1,0 +1,8 @@
+---
+- name: Create ssl.conf file per domain
+  template:
+    src: domain-ssl.conf.j2
+    dest: "{{ apache_conf_path }}/vhost_{{ item }}-ssl.conf"
+  with_items:
+    - "{{ certbot_domains }}"
+  notify: reload apache

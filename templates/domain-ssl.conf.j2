@@ -1,0 +1,26 @@
+# {{ ansible_managed }}
+# This creates a virtual host SSL config for each domain
+# that is applied to this server
+
+
+
+<VirtualHost _default_:443>
+
+ServerName {{ item }}
+
+ErrorLog logs/ssl_error_log
+TransferLog logs/ssl_access_log
+LogLevel warn
+
+SSLEngine on
+SSLProtocol all -SSLv2 -SSLv3
+SSLCipherSuite HIGH:3DES:!aNULL:!MD5:!SEED:!IDEA
+SSLCertificateFile {{ cerbot_work_dir }}/live/{{ item }}/cert.pem
+SSLCertificateKeyFile {{ cerbot_work_dir }}/live/{{ item }}/privkey.pem
+SSLCertificateChainFile {{ cerbot_work_dir }}/live/{{ item }}/chain.pem
+
+CustomLog logs/ssl_request_log \
+          "%t %h %{SSL_PROTOCOL}x %{SSL_CIPHER}x \"%r\" %b"
+
+</VirtualHost>
+

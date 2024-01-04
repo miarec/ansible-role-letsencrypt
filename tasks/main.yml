@@ -1,15 +1,31 @@
 ---
-- import_tasks: include-vars.yml
+- import_tasks: preflight.yml
 
-- import_tasks: dependencies.yml
-  become: yes
+- import_tasks: prepare.yml
+  become: true
+
+- import_tasks: install-certbot.yml
+  become: true
+  become_user: "{{ certbot_user }}"
 
 - import_tasks: well-known.yml
-  become: yes  
-  
-- import_tasks: create-cert.yml
-  become: yes
+  become: true
+  when: certbot_method == 'webroot'
+
+- import_tasks: create-cert-webroot.yml
+  become: true
+  become_user: "{{ certbot_user }}"
+  when: certbot_method == 'webroot'
+
+- import_tasks: create-cert-dns-route53.yml
+  become: true
+  become_user: "{{ certbot_user }}"
+  when: certbot_method == 'dns-route53'
+
+- import_tasks: modify_apache.yml
+  become: true
+  when: certbot_modify_apache
 
 - import_tasks: renew-cron.yml
+  become: true
   when: certbot_auto_renew
-  become: yes

@@ -1,0 +1,23 @@
+---
+- name: Upgrade PIP and create python virtual environment for certbot
+  pip:
+    name: pip
+    state: latest
+    virtualenv: "{{ certbot_bin_dir }}/{{ certbot_venv }}"
+    virtualenv_command: "{{ _python_path.stdout }} -m venv"
+
+- name: Install python dependencies
+  pip:
+    name: "{{ certbot_python_dependencies }}"
+    state: latest
+    virtualenv: "{{ certbot_bin_dir }}/{{ certbot_venv }}"
+    virtualenv_command: "{{ _python_path.stdout }} -m venv"
+
+- name: Install certbot and plugins
+  pip:
+    name:
+      - certbot-apache
+      - certbot-dns-route53
+    state: present
+    virtualenv: "{{ certbot_bin_dir }}/{{ certbot_venv }}"
+    virtualenv_command: "{{ _python_path.stdout }} -m venv"

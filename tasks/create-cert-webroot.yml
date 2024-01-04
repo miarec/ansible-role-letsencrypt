@@ -1,0 +1,18 @@
+---
+- name: Check if certificates exists. | Webroot
+  stat:
+    path: /etc/letsencrypt/live/{{ item }}/cert.pem
+  register: _letsencrypt_certs
+  with_items: "{{ certbot_domains }}"
+
+- name: Generate new certificates if they do not exist. | Webroot
+  command: >-
+    {{ certbot_script }} certonly
+    --webroot
+    -w /var/www/html/
+    --noninteractive
+    --agree-tos
+    --email {{ certbot_email }}
+    -d {{ item.item }}
+  loop: "{{ _letsencrypt_certs.results }}"
+  when: not item.stat.exists
