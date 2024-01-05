@@ -3,7 +3,7 @@
   stat:
     path: /etc/letsencrypt/live/{{ item }}/cert.pem
   register: _letsencrypt_certs
-  with_items: "{{ certbot_domains }}"
+  with_items: "{{ _certbot_all_domains }}"
 
 - name: Generate new certificates if they do not exist. | Webroot
   command: >-

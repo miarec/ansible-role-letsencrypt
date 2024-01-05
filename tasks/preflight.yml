@@ -7,10 +7,19 @@
     - "{{ ansible_os_family }}.yml"
     - "default.yml"
 
-- name: Check for certbot_domains variable.
+- name: Check for certbot_domains/certbot_domain variable (1).
   fail:
-    msg: Parameters 'certbot_domains' must be provided.
-  when: not certbot_domains
+    msg: Either parameter 'certbot_domains' or 'certbot_domain' must be provided.
+  when: 
+    - not certbot_domains
+    - not certbot_domain
+
+- name: Check for certbot_domains/certbot_domain variable (2)
+  fail:
+    msg: Only one of 'certbot_domains' or 'certbot_domain' must be provided, not both
+  when: 
+    - certbot_domains
+    - certbot_domain
 
 - name: Check for certbot_email variable.
   fail:

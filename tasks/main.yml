@@ -12,6 +12,17 @@
   become: true
   when: certbot_method == 'webroot'
 
+# Multiple domains were provided
+- set_fact:
+    _certbot_all_domains: "{{ certbot_domains }}"
+  when: certbot_domains
+
+# A single domain was provided
+- set_fact:
+    _certbot_all_domains: 
+      - "{{ certbot_domain }}"
+  when: certbot_domain
+
 - import_tasks: create-cert-webroot.yml
   become: true
   become_user: "{{ certbot_user }}"

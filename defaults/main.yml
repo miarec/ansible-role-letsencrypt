@@ -16,8 +16,19 @@ certbot_python_dependencies:
 # Parameters used when creating new Certbot certs
 # Both 'certbot_email' and 'certbot_domains' are required
 certbot_method: webroot
-certbot_email:
-certbot_domains:
+certbot_email: "{{ certbot_admin_email | default('') }}"
+
+# A single domain
+# Example:
+#  cerbot_domain: "domain.example.com"
+certbot_domain:
+
+# Multiple domains (as a list)
+# Example:
+#  cerbot_domains:
+#    - "one.example.com"
+#    - "two.example.com"
+certbot_domains: 
 
 certbot_script: "{{ certbot_bin_dir }}/{{ certbot_venv }}/bin/certbot"
 
