@@ -1,26 +1,26 @@
 # {{ ansible_managed }}
-# This creates a virtual host SSL config for each domain
-# that is applied to this server
-
-
 
 <VirtualHost _default_:443>
 
-ServerName {{ item }}
+    ServerName {{ item }}
 
-ErrorLog logs/ssl_error_log
-TransferLog logs/ssl_access_log
-LogLevel warn
+    SSLEngine on
+    SSLProtocol TLSv1.2
+    SSLCipherSuite HIGH:MEDIUM:!SSLv3:!kRSA:!RC4:!3DES
+    SSLCertificateFile {{ cerbot_work_dir }}/live/{{ item }}/cert.pem
+    SSLCertificateKeyFile {{ cerbot_work_dir }}/live/{{ item }}/privkey.pem
+    SSLCertificateChainFile {{ cerbot_work_dir }}/live/{{ item }}/chain.pem
 
-SSLEngine on
-SSLProtocol all -SSLv2 -SSLv3
-SSLCipherSuite HIGH:3DES:!aNULL:!MD5:!SEED:!IDEA
-SSLCertificateFile {{ cerbot_work_dir }}/live/{{ item }}/cert.pem
-SSLCertificateKeyFile {{ cerbot_work_dir }}/live/{{ item }}/privkey.pem
-SSLCertificateChainFile {{ cerbot_work_dir }}/live/{{ item }}/chain.pem
+    <IfModule mod_headers.c>
+        Header always set Strict-Transport-Security "max-age=63072000; includeSubDomains; preload"
+    </IfModule>
 
-CustomLog logs/ssl_request_log \
-          "%t %h %{SSL_PROTOCOL}x %{SSL_CIPHER}x \"%r\" %b"
+    ErrorLog ${APACHE_LOG_DIR}/{{ item }}_ssl_error.log
+    TransferLog ${APACHE_LOG_DIR}/{{ item }}_ssl_access.log
+    LogLevel warn
+
+    CustomLog ${APACHE_LOG_DIR}/{{ item }}_ssl_request.log \
+            "%t %h %{SSL_PROTOCOL}x %{SSL_CIPHER}x \"%r\" %b"
 
 </VirtualHost>
 
