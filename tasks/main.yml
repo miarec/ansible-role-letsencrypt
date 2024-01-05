@@ -43,9 +43,9 @@
   become_user: "{{ certbot_user }}"
   when: certbot_method == 'dns-route53'
 
-- import_tasks: modify_apache.yml
+- import_tasks: configure_apache.yml
   become: true
-  when: certbot_modify_apache
+  when: certbot_configure_apache
 
 - import_tasks: renew-cron.yml
   become: true

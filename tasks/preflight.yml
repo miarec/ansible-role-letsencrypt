@@ -26,6 +26,7 @@
     msg: Parameters 'certbot_email' must be provided.
   when: not certbot_email
 
+
 - name: Find path for specified python version.
   command: "which {{ certbot_python }}"
   register: _python_path

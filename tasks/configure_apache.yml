@@ -4,5 +4,5 @@
     src: domain-ssl.conf.j2
     dest: "{{ apache_conf_path }}/vhost_{{ item }}-ssl.conf"
   with_items:
-    - "{{ certbot_domains }}"
+    - "{{ _certbot_all_domains }}"
   notify: reload apache

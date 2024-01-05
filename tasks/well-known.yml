@@ -23,7 +23,6 @@
   template:
     src: "apache-{{ apache_version_base }}-letsencrypt-well-known.conf.j2"
     dest: "{{ apache_conf_path }}/letsencrypt-well-known.conf"
-  notify: reload apache
   register: _letsencrypt_well_known
 
 - name: reload apache configuration

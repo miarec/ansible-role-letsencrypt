@@ -28,9 +28,16 @@ This should be customized and set to an email address that you or your organizat
 
 ### Domain names
 
-    certbot_domain:
+Option 1. Multiple domains:
+
+    certbot_domains:
      - miarec.example.com
      - recording.example.com
+
+Option 2. A single domain:
+
+    certbot_domain: miarec.example.com
+
 
 A domain for each SSL certificate should be generated.
 
@@ -38,11 +45,13 @@ A domain for each SSL certificate should be generated.
 
     certbot_method: webroot
 
-Method used for challenging SSL certificate
+Method used for challenging SSL certificate:
+
 - `webroot` (default) will use a direct HTTP challenge, this is suitable only if this is the only server that will respond to this request
 - `dns-route53` will use a DNS challenge configuring a record in AWS Route53 Hosted Zone, NOTE: Instance needs IAM permissions to modify Route53 records
 
 ### Cron auto-renew task
+
     certbot_auto_renew: true
     certbot_auto_renew_user: "{{ ansible_user | default(lookup('env', 'USER')) }}"
     certbot_auto_renew_hour: "3"
@@ -54,9 +63,20 @@ The defaults run `certbot renew` (or `certbot-auto renew`) via cron every day at
 It's preferred that you set a custom user/hour/minute so the renewal is during a low-traffic period and done by a non-root user account.
 
 
+### Configure Apache
+
+Create Virtual Host SSL configuration for each domain (enabled by default):
+
+    certbot_configure_apache: true
+
+If SSL certificates are not used in Apache, then set `certbot_configure_apache` to `false`
+
 ## Dependencies
 
-None.
+- Python
+- Apache, if using `webroot` challenge method.
+- IAM role with permissions to create TXT records for the managed domains in Route53 service, if using `dns-route53` challenge method
+
 
 ## Example Playbook
 
