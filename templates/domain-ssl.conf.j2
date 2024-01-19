@@ -15,12 +15,37 @@
         Header always set Strict-Transport-Security "max-age=63072000; includeSubDomains; preload"
     </IfModule>
 
+
+    # Set location of log files
+    #
+    # On RedHat/CentOS the default location of log files is relative from the ServerRoot base directory
+    # /etc/httpd/ and typically a symlink from /etc/httpd/logs to /var/log/httpd
+    #
+    # On Debian there is no symlink like that, but there is a defined variable ${APACHE_LOG_DIR}
+    # which points to /var/log/apache
+
+    {% if ansible_os_family == "RedHat" -%}
+
+    ErrorLog "logs/{{ item }}_ssl_error.log"
+    TransferLog "logs/{{ item }}_ssl_access.log"
+    LogLevel warn
+
+    CustomLog "logs/{{ item }}_ssl_request.log" \
+            "%t %h %{SSL_PROTOCOL}x %{SSL_CIPHER}x \"%r\" %b"
+    
+
+    {% else -%}
+
     ErrorLog ${APACHE_LOG_DIR}/{{ item }}_ssl_error.log
     TransferLog ${APACHE_LOG_DIR}/{{ item }}_ssl_access.log
     LogLevel warn
 
     CustomLog ${APACHE_LOG_DIR}/{{ item }}_ssl_request.log \
             "%t %h %{SSL_PROTOCOL}x %{SSL_CIPHER}x \"%r\" %b"
+
+
+    {% endif -%}
+
 
 </VirtualHost>
 
