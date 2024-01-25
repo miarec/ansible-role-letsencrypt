@@ -22,14 +22,14 @@ certbot_email: "{{ certbot_admin_email | default('') }}"
 # A single domain
 # Example:
 #  cerbot_domain: "domain.example.com"
-certbot_domain:
+# certbot_domain:
 
 # Multiple domains (as a list)
 # Example:
 #  cerbot_domains:
 #    - "one.example.com"
 #    - "two.example.com"
-certbot_domains: 
+# certbot_domains: 
 
 # Register new SSL certificates in Apache
 # This will create virtual host records for each domain

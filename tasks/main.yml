@@ -15,13 +15,13 @@
 # Multiple domains were provided
 - set_fact:
     _certbot_all_domains: "{{ certbot_domains }}"
-  when: certbot_domains
+  when: certbot_domains is defined
 
 # A single domain was provided
 - set_fact:
     _certbot_all_domains: 
       - "{{ certbot_domain }}"
-  when: certbot_domain
+  when: certbot_domains is not defined
 
 - name: Create .well-known/acme-challenge directory for Certbot
   file:

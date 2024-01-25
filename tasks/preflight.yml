@@ -11,15 +11,15 @@
   fail:
     msg: Either parameter 'certbot_domains' or 'certbot_domain' must be provided.
   when: 
-    - not certbot_domains
-    - not certbot_domain
+    - certbot_domains is not defined
+    - certbot_domain is not defined
 
 - name: Check for certbot_domains/certbot_domain variable (2)
   fail:
     msg: Only one of 'certbot_domains' or 'certbot_domain' must be provided, not both
   when: 
-    - certbot_domains
-    - certbot_domain
+    - certbot_domains is defined
+    - certbot_domain is defined
 
 - name: Check for certbot_email variable.
   fail:
