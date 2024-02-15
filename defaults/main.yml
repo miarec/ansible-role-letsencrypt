@@ -29,7 +29,7 @@ certbot_email: "{{ certbot_admin_email | default('') }}"
 #  cerbot_domains:
 #    - "one.example.com"
 #    - "two.example.com"
-# certbot_domains: 
+# certbot_domains:
 
 # Register new SSL certificates in Apache
 # This will create virtual host records for each domain
