@@ -12,6 +12,11 @@
     #         cache_valid_time: 600
     #       changed_when: false
     #       when: ansible_os_family == "Debian"
+    # - set_facts:
+    #     certbot_domain: testing.miarecdev.net  # this will need to be dynamic probbaly
+    #     certbot_email: ssl@miarec.com
+    #     certbot_python: python3  # Im going to need to install python3
+
 
   roles:
     - role: ansible-role-lets-encrypt
