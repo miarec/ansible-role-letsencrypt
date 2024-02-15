@@ -2,6 +2,11 @@
 - name: Converge
   hosts: all
   become: true
+  vars:
+    certbot_domain: ansible-role-letsencrypt.example.com
+    certbot_email: ssl-molecule@example.com
+    certbot_method: none
+    certbot_configure_apache: false
 
   pre_tasks:
     # - name: Install prerequisites
@@ -12,13 +17,12 @@
     #         cache_valid_time: 600
     #       changed_when: false
     #       when: ansible_os_family == "Debian"
-    # - set_facts:
-    #     certbot_domain: testing.miarecdev.net  # this will need to be dynamic probbaly
-    #     certbot_email: ssl@miarec.com
-    #     certbot_python: python3  # Im going to need to install python3
 
+    - set_fact:
+        ansible_python_interpreter: python3
+      when: ansible_distribution == "CentOS"
 
   roles:
-    - role: ansible-role-lets-encrypt
+    - role: ansible-role-letsencrypt
       tags:
         - letsencrypt

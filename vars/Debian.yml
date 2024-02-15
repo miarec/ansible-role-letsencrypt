@@ -1,7 +1,9 @@
 ---
 dependencies:
  - python3-venv
+ - python3-packaging
  - libaugeas0
+ - cron
 
 apache_service: apache2
 apache_daemon: apache2

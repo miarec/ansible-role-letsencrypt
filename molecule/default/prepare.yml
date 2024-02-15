@@ -3,6 +3,5 @@
   hosts: all
   become: true
   tasks:
-    - include_tasks: apache.yml
     - include_tasks: python3.yml  # maybe this is only needed for centos7
       when: ansible_distribution == "CentOS"

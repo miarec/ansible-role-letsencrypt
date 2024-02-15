@@ -1,6 +1,9 @@
 ---
 dependencies:
   - augeas
+  - gcc
+  - libffi-devel
+  - cronie
 
 apache_service: httpd
 apache_daemon: httpd

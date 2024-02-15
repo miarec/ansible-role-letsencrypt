@@ -1,15 +1,26 @@
 ---
-- name: Install Python3 Dependencies
-  package:
-    name: epel-release
-    state: present
-  # with_items:
-  #   - epel-release
-  # when: ansible_os_family == "RedHat"
+- name: CentOS 7 - Install Python3.8 from package - RPM
+  block:
 
-# Install python from package
-- name: Install Python3 packages
-  package:
-    name: python3
-    state: present
-  # with_items: "{{ python3_packages }}"
+    - name: CentOS 7 - Install Python3.8 dependencies
+      yum:
+        name: "{{ item }}"
+        state: present
+      with_items:
+        - centos-release-scl-rh
+
+    - name: CentOS 7 - Install Python3.8 packages
+      yum:
+        name: "{{ item }}"
+        state: present
+      with_items:
+        - rh-python38-python
+        - rh-python38-python-devel
+
+    - name: Create Symbolic link
+      file:
+        src: /opt/rh/rh-python38/root/usr/bin/python3.8
+        dest: /usr/bin/python3
+        state: link
+
+  when: ansible_distribution == "CentOS"
