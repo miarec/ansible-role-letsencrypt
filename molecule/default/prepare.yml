@@ -2,6 +2,8 @@
 - name: Prepare
   hosts: all
   become: true
+
   tasks:
-    - include_tasks: python3.yml  # maybe this is only needed for centos7
+    - name: Install Python3.8 on CentOS
+      include_tasks: python3.yml
       when: ansible_distribution == "CentOS"
