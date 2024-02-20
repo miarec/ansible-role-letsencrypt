@@ -26,8 +26,10 @@
         state: link
 
 
-- name: Install Python3.8 or later | Rocky
-  when: ansible_distribution == "Rocky"
+- name: Prepare | Install Python3.8 or later | Rocky/RHEL 8+
+  when:
+    - ansible_os_family == "RedHat"
+    - ansible_distribution_major_version >= "8"
   block:
 
     - set_fact:
@@ -44,9 +46,34 @@
 
     # - debug: var=_python_packages
 
-    - name: Install Python 3.8 or later | Rocky
+    - name: Prepare | Install Python 3.8 or later | Rocky/RHEL 8+
       package:
         name: "{{ item }}"
         state: present
       with_items:
         - "{{ _python_packages }}"
+
+# - name: Install Python3.8 or later | Rocky
+#   when: ansible_distribution == "Rocky"
+#   block:
+
+#     - set_fact:
+#         _python_packages:
+#           - python38
+#           - python38-devel
+#       when: ansible_distribution_major_version == "8"
+
+#     - set_fact:
+#         _python_packages:
+#           - python3
+#           - python3-devel
+#       when: ansible_distribution_major_version == "9"
+
+#     # - debug: var=_python_packages
+
+#     - name: Install Python 3.8 or later | Rocky
+#       package:
+#         name: "{{ item }}"
+#         state: present
+#       with_items:
+#         - "{{ _python_packages }}"
