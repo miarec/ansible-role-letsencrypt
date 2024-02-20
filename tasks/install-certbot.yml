@@ -5,6 +5,8 @@
     state: latest
     virtualenv: "{{ certbot_bin_dir }}/{{ certbot_venv }}"
     virtualenv_command: "{{ _python_path.stdout }} -m venv"
+  become: true
+  become_user: "{{ certbot_user }}"
 
 - name: Install python dependencies
   pip:
@@ -12,6 +14,8 @@
     state: latest
     virtualenv: "{{ certbot_bin_dir }}/{{ certbot_venv }}"
     virtualenv_command: "{{ _python_path.stdout }} -m venv"
+  become: true
+  become_user: "{{ certbot_user }}"
 
 - name: Install certbot and plugins
   pip:
@@ -21,3 +25,17 @@
     state: present
     virtualenv: "{{ certbot_bin_dir }}/{{ certbot_venv }}"
     virtualenv_command: "{{ _python_path.stdout }} -m venv"
+  become: true
+  become_user: "{{ certbot_user }}"
+
+# when Virtual environment is created, group `users`is set
+# setting ownership back to `certbot_user` and `certbot_group`
+- name: Set ownership of virtual environment.
+  file:
+    path: "{{ certbot_bin_dir }}/{{ certbot_venv }}"
+    state: directory
+    owner: "{{ certbot_user }}"
+    group: "{{ certbot_group }}"
+    mode: 0755
+    recurse: yes
+  become: true

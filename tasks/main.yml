@@ -5,8 +5,6 @@
   become: true
 
 - import_tasks: install-certbot.yml
-  become: true
-  become_user: "{{ certbot_user }}"
 
 - import_tasks: well-known.yml
   become: true
@@ -19,7 +17,7 @@
 
 # A single domain was provided
 - set_fact:
-    _certbot_all_domains: 
+    _certbot_all_domains:
       - "{{ certbot_domain }}"
   when: certbot_domains is not defined
 

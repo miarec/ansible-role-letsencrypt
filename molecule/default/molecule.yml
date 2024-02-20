@@ -14,6 +14,8 @@ platforms:
     pre_build_image: true
 provisioner:
   name: ansible
+  env:
+    ANSIBLE_VERBOSITY: ${MOLECULE_ANSIBLE_VERBOSITY:-0}
   playbooks:
     converge: ${MOLECULE_PLAYBOOK:-converge.yml}
 verifier:
