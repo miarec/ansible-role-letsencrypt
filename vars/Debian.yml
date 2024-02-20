@@ -1,7 +1,7 @@
 ---
 dependencies:
- - python3-venv
- - python3-packaging
+#  - python3-venv
+#  - python3-packaging
  - libaugeas0
  - cron
 

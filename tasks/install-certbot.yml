@@ -28,7 +28,7 @@
   become: true
   become_user: "{{ certbot_user }}"
 
-# When virtual environment is created, group `users`is set
+# When virtual environment is created, group `users` is set for all files/dirs
 # setting ownership back to `certbot_user` and `certbot_group`
 - name: Set ownership of virtual environment.
   file:

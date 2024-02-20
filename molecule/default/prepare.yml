@@ -6,5 +6,3 @@
   tasks:
     - name: Install Python3.8 or higher
       include_tasks: python3.yml
-      # when: ansible_distribution == "CentOS"
-      when: ansible_os_family == "RedHat"

@@ -1,6 +1,6 @@
 ---
 dependencies:
-  - augeas
+  - augeas-libs
   - gcc
   - libffi-devel
   - cronie
