@@ -1,22 +1,28 @@
 ---
-- import_tasks: preflight.yml
+- name: Load OS specific variables and execute varaible checks.
+  import_tasks: preflight.yml
 
-- import_tasks: prepare.yml
+- name: Prepare host for certbot install.
+  import_tasks: prepare.yml
   become: true
 
-- import_tasks: install-certbot.yml
+- name: Install Certbot.
+  import_tasks: install-certbot.yml
 
-- import_tasks: well-known.yml
+- name: Create well-known file for challenge
+  import_tasks: well-known.yml
   become: true
   when: certbot_method == 'webroot'
 
 # Multiple domains were provided
-- set_fact:
+- name: Render domain list when multiple domains were provided
+  set_fact:
     _certbot_all_domains: "{{ certbot_domains }}"
   when: certbot_domains is defined
 
 # A single domain was provided
-- set_fact:
+- name: Render Domain list when a single domain was provided
+  set_fact:
     _certbot_all_domains:
       - "{{ certbot_domain }}"
   when: certbot_domains is not defined
@@ -31,20 +37,24 @@
   become: true
   when: certbot_method == 'webroot'
 
-- import_tasks: create-cert-webroot.yml
+- name: Create certificates with Webroot challenge
+  import_tasks: create-cert-webroot.yml
   become: true
   become_user: "{{ certbot_user }}"
   when: certbot_method == 'webroot'
 
-- import_tasks: create-cert-dns-route53.yml
+- name: Create certificates with DNS challenge via AWS Rt53
+  import_tasks: create-cert-dns-route53.yml
   become: true
   become_user: "{{ certbot_user }}"
   when: certbot_method == 'dns-route53'
 
-- import_tasks: configure_apache.yml
+- name: Configure Apache.
+  import_tasks: configure_apache.yml
   become: true
   when: certbot_configure_apache
 
-- import_tasks: renew-cron.yml
+- name: Schedule renewal via Cron.
+  import_tasks: renew-cron.yml
   become: true
   when: certbot_auto_renew

@@ -5,4 +5,4 @@
     dest: "{{ apache_conf_path }}/vhost_{{ item }}-ssl.conf"
   with_items:
     - "{{ _certbot_all_domains }}"
-  notify: reload apache
+  notify: Reload apache

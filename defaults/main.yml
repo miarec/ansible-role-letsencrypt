@@ -13,7 +13,6 @@ certbot_script: "{{ certbot_bin_dir }}/{{ certbot_venv }}/bin/certbot"
 certbot_python_dependencies:
   - wheel
 
-
 # Parameters used when creating new Certbot certs
 # Both 'certbot_email' and 'certbot_domains' are required
 certbot_method: webroot
@@ -35,9 +34,7 @@ certbot_email: "{{ certbot_admin_email | default('') }}"
 # This will create virtual host records for each domain
 certbot_configure_apache: true
 
-
 # Certbot auto-renew cron job configuration (for certificate renewals).
 certbot_auto_renew: true
 certbot_auto_renew_user: "{{ certbot_user }}"
 certbot_auto_renew_options: '--quiet --no-self-upgrade --post-hook "apachectl graceful"'
-

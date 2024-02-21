@@ -2,7 +2,7 @@
 - name: Upgrade PIP and create python virtual environment for certbot
   pip:
     name: pip
-    state: latest
+    state: latest    # Need to test if it is needed to upgrade pip
     virtualenv: "{{ certbot_bin_dir }}/{{ certbot_venv }}"
     virtualenv_command: "{{ _python_path.stdout }} -m venv"
   become: true
@@ -11,7 +11,8 @@
 - name: Install python dependencies
   pip:
     name: "{{ certbot_python_dependencies }}"
-    state: latest
+    # state: latest
+    state: present
     virtualenv: "{{ certbot_bin_dir }}/{{ certbot_venv }}"
     virtualenv_command: "{{ _python_path.stdout }} -m venv"
   become: true
@@ -37,5 +38,5 @@
     owner: "{{ certbot_user }}"
     group: "{{ certbot_group }}"
     mode: 0755
-    recurse: yes
+    recurse: true
   become: true
