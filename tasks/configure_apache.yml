@@ -3,6 +3,7 @@
   template:
     src: domain-ssl.conf.j2
     dest: "{{ apache_conf_path }}/vhost_{{ item }}-ssl.conf"
+    mode: 0644
   with_items:
     - "{{ _certbot_all_domains }}"
   notify: Reload apache
