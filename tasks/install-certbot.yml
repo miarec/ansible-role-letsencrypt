@@ -29,14 +29,14 @@
   become: true
   become_user: "{{ certbot_user }}"
 
-# When virtual environment is created, group `users` is set for all files/dirs
-# setting ownership back to `certbot_user` and `certbot_group`
-- name: Set ownership of virtual environment.
-  file:
-    path: "{{ certbot_bin_dir }}/{{ certbot_venv }}"
-    state: directory
-    owner: "{{ certbot_user }}"
-    group: "{{ certbot_group }}"
-    mode: 0755
-    recurse: true
-  become: true
+# # When virtual environment is created, group `users` is set for all files/dirs
+# # setting ownership back to `certbot_user` and `certbot_group`
+# - name: Set ownership of virtual environment.
+#   file:
+#     path: "{{ certbot_bin_dir }}/{{ certbot_venv }}"
+#     state: directory
+#     owner: "{{ certbot_user }}"
+#     group: "{{ certbot_group }}"
+#     mode: 0755
+#     recurse: true
+#   become: true

@@ -1,7 +1,8 @@
 ---
 # Certbot install options
 certbot_python: python3
-certbot_user: certbot
+certbot_user: root
+# certbot_user: certbot
 certbot_group: "{{ certbot_user }}"
 
 cerbot_work_dir: "/etc/letsencrypt"
