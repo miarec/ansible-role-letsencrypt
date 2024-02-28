@@ -19,9 +19,9 @@ MOLECULE_DISTRO=centos7 molecule test
     - `ubuntu2204`
     - `ubuntu2004`
     - `centos7`
-    - `rockylinux8` NOT TESTED
-    - `rockylinx9` NOT TESTED
-    - `rhel7` NOT TESTED
-    - `rhel8` NOT TESTED
-    - `rhel9` NOT TESTED
+    - `rockylinux8`
+    - `rockylinx9`
+    - `rhel7`
+    - `rhel8`
+    - `rhel9`
  - `MOLECULE_ANSIBLE_VERBOSITY` `0-3`, sets ansible verbosity for debugging, default `0`

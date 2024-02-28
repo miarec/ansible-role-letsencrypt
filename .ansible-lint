@@ -5,9 +5,9 @@ exclude_paths:
 skip_list:
   - fqcn
   - package-latest
-  # - yaml[line-length]
-  # - yaml[empty-lines]
-  # - yaml[trailing-spaces]
-  # - yaml[truthy]
-  # - jinja[spacing]
-  # - name[template]
+  - yaml[line-length]
+  - yaml[empty-lines]
+  - yaml[trailing-spaces]
+  - yaml[truthy]
+  - jinja[spacing]
+  - name[template]
