@@ -1,8 +1,7 @@
 ---
 # Certbot install options
 certbot_python: python3
-certbot_user: root
-# certbot_user: certbot
+certbot_user: certbot
 certbot_group: "{{ certbot_user }}"
 
 cerbot_work_dir: "/etc/letsencrypt"
@@ -34,8 +33,10 @@ certbot_email: "{{ certbot_admin_email | default('') }}"
 # Register new SSL certificates in Apache
 # This will create virtual host records for each domain
 certbot_configure_apache: true
+certbot_apachectl_path: /usr/sbin/apachectl
 
 # Certbot auto-renew cron job configuration (for certificate renewals).
 certbot_auto_renew: true
 certbot_auto_renew_user: "{{ certbot_user }}"
-certbot_auto_renew_options: '--quiet --no-self-upgrade --post-hook "apachectl graceful"'
+certbot_auto_renew_options: '--quiet --no-self-upgrade --post-hook "sudo apachectl graceful"'
+
