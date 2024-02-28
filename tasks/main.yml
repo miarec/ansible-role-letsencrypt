@@ -8,6 +8,7 @@
 
 - name: Install Certbot.
   import_tasks: install-certbot.yml
+  become: true
 
 - name: Create well-known file for challenge
   import_tasks: well-known.yml
