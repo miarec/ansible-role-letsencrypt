@@ -1,7 +1,8 @@
 ---
 dependencies:
- - python3-venv
  - libaugeas0
+ - cron
+ - acl  # this is required to set permissions on temp files
 
 apache_service: apache2
 apache_daemon: apache2

@@ -6,4 +6,4 @@
     special_time: daily
     user: "{{ certbot_auto_renew_user }}"
     cron_file: ansible_certbot_renew
-  notify: reload cron
+  notify: Reload cron

@@ -16,3 +16,5 @@
     -d {{ item.item }}
   loop: "{{ _letsencrypt_certs.results }}"
   when: not item.stat.exists
+  args:
+    creates: "{{ cerbot_work_dir }}/live/{{ item.item }}/cert.pem"

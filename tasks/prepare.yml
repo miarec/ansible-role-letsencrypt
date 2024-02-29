@@ -1,39 +1,47 @@
 ---
-- name: install package dependencies.
+- name: Install package dependencies.
   package:
     name: "{{ item }}"
     state: present
   with_items:
     - "{{ dependencies }}"
 
-- name: Create the certbot group
-  group:
-    name: "{{ certbot_group }}"
-    state: present
-    system: true
-  when:
-    - certbot_group != "root"
+- name: Set up certbot_user if not `root`.
+  when: certbot_group != "root"
+  block:
 
-- name: Create the certbot user
-  user:
-    name: "{{ certbot_user }}"
-    groups: "{{ certbot_group }}"
-    append: true
-    shell: /usr/sbin/nologin
-    system: true
-    createhome: false
-    home: /
-  when:
-    - certbot_user != "root"
+    - name: Create the certbot group
+      group:
+        name: "{{ certbot_group }}"
+        state: present
+        system: true
 
-- name: Create Certbot directories
+    - name: Create the certbot user
+      user:
+        name: "{{ certbot_user }}"
+        groups: "{{ certbot_group }}"
+        append: true
+        shell: /usr/sbin/nologin
+        system: true
+        createhome: false
+        home: /
+
+    - name: Give permission for certbot user to reload apache
+      lineinfile:
+        line: "{{ certbot_user }} ALL= NOPASSWD: {{ certbot_apachectl_path }}"
+        dest: "/etc/sudoers.d/{{ certbot_user }}"
+        mode: 0440
+        create: true
+        validate: /usr/sbin/visudo -cf %s
+
+- name: Create certbot directories / Make sure ownership is correct
   file:
     path: "{{ item }}"
     state: directory
     owner: "{{ certbot_user }}"
     group: "{{ certbot_group }}"
     mode: 0755
-    recurse: yes
+    recurse: true
   with_items:
     - "{{ cerbot_work_dir }}"
     - "{{ certbot_log_dir }}"
