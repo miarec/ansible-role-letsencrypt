@@ -23,6 +23,12 @@ def test_user(host):
 def test_certbot(host):
     assert host.run("/opt/certbot/venv/bin/certbot --version").rc ==0, "Certbot should work inside venv"
 
+def test_apachectl(host):
+
+    with host.sudo("certbot"):
+        c = host.run("sudo /usr/sbin/apachectl -v")
+
+    assert c.rc == 0, "Certbot should be able to call apachectl with sudo and no password"
 
 def test_files(host):
     files = [

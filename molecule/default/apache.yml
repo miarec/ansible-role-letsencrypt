@@ -20,10 +20,9 @@
         enabled: true
   when: ansible_os_family == "Debian"
 
-
-- name: CentOS 7 - Install and Configure Apache
+- name: RedHat - Install and Configure Apache
   block:
-    - name: CentOS 7 - Install Apache
+    - name: RedHat - Install Apache
       yum:
         name: "{{ item }}"
         state: present
@@ -36,4 +35,4 @@
         state: started
         enabled: true
 
-  when: ansible_distribution == "CentOS"
+  when: ansible_os_family == "RedHat"

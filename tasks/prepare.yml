@@ -26,13 +26,13 @@
         createhome: false
         home: /
 
-# This didnt work properly
-    # - name: Give permission for certbot user to reload apache
-    #   template:
-    #     src: sudoers.j2
-    #     dest: "/etc/sudoers.d/{{ certbot_user }}"
-    #     mode: 0644
-    #   when: certbot_method == 'webroot'
+    - name: Give permission for certbot user to reload apache
+      lineinfile:
+        line: "{{ certbot_user }} ALL= NOPASSWD: {{ certbot_apachectl_path }}"
+        dest: "/etc/sudoers.d/{{ certbot_user }}"
+        mode: 0440
+        create: true
+        validate: /usr/sbin/visudo -cf %s   # Check the syntax of teh file before saving
 
 - name: Create Certbot directories / Make sure ownership is correct
   file:

@@ -6,3 +6,6 @@
   tasks:
     - name: Install Python3.8 or higher
       include_tasks: python3.yml
+
+    - name: Install Apache
+      include_tasks: apache.yml
