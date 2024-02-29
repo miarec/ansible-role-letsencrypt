@@ -34,7 +34,6 @@ certbot_email: "{{ certbot_admin_email | default('') }}"
 # This will create virtual host records for each domain
 certbot_configure_apache: true
 certbot_apachectl_path: /usr/sbin/apachectl
-# certbot_apachectl_path: /usr/bin/python3
 
 
 # Certbot auto-renew cron job configuration (for certificate renewals).

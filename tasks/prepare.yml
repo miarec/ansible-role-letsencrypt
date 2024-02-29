@@ -6,7 +6,7 @@
   with_items:
     - "{{ dependencies }}"
 
-- name: Certbot is not root user
+- name: Set up certbot_user if not `root`.
   when: certbot_group != "root"
   block:
 
@@ -32,9 +32,9 @@
         dest: "/etc/sudoers.d/{{ certbot_user }}"
         mode: 0440
         create: true
-        validate: /usr/sbin/visudo -cf %s   # Check the syntax of teh file before saving
+        validate: /usr/sbin/visudo -cf %s
 
-- name: Create Certbot directories / Make sure ownership is correct
+- name: Create certbot directories / Make sure ownership is correct
   file:
     path: "{{ item }}"
     state: directory

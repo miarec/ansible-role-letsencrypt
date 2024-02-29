@@ -2,7 +2,7 @@
 - name: Upgrade PIP and create python virtual environment for certbot
   pip:
     name: pip
-    state: latest    # Need to test if it is needed to upgrade pip
+    state: latest
     virtualenv: "{{ certbot_bin_dir }}/{{ certbot_venv }}"
     virtualenv_command: "{{ _python_path.stdout }} -m venv"
 
