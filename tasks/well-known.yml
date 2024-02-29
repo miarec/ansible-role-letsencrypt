@@ -27,11 +27,3 @@
     dest: "{{ apache_conf_path }}/letsencrypt-well-known.conf"
     mode: 0644
   notify: Reload apache
-#   register: _letsencrypt_well_known
-
-# - name: Reload apache configuration
-#   service:
-#     name: "{{ apache_service }}"
-#     state: reloaded
-#   when: _letsencrypt_well_known.changed
-#   become: true
