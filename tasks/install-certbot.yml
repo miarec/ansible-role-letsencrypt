@@ -1,17 +1,22 @@
 ---
-- name: Upgrade PIP and create python virtual environment for certbot
-  pip:
-    name: pip
-    state: latest
-    virtualenv: "{{ certbot_bin_dir }}/{{ certbot_venv }}"
-    virtualenv_command: "{{ _python_path.stdout }} -m venv"
+- name: Create python virtual environment
+  shell:
+    cmd: "umask 0022 && {{ _python_path.stdout }} -m venv {{ certbot_bin_dir }}/{{ certbot_venv }}"
+    creates: "{{ certbot_bin_dir }}/{{ certbot_venv }}"
+  register: create_pyenv
+
+- name: Upgrade PIP, wheel and setuptools    # noqa: no-handler
+  shell:
+    cmd: "umask 0022 && {{ certbot_bin_dir }}/{{ certbot_venv }}/bin/python -m pip install --upgrade pip setuptools wheel"
+  changed_when: true
+  when: create_pyenv.changed
 
 - name: Install python dependencies
   pip:
     name: "{{ certbot_python_dependencies }}"
     state: present
-    virtualenv: "{{ certbot_bin_dir }}/{{ certbot_venv }}"
-    virtualenv_command: "{{ _python_path.stdout }} -m venv"
+    executable: "{{ certbot_bin_dir }}/{{ certbot_venv }}/bin/pip"
+    umask: "0022"
 
 - name: Install certbot and plugins
   pip:
@@ -19,8 +24,8 @@
       - certbot-apache
       - certbot-dns-route53
     state: present
-    virtualenv: "{{ certbot_bin_dir }}/{{ certbot_venv }}"
-    virtualenv_command: "{{ _python_path.stdout }} -m venv"
+    executable: "{{ certbot_bin_dir }}/{{ certbot_venv }}/bin/pip"
+    umask: "0022"
 
 # When virtual environment is created, group `users` is set for all files/dirs
 # group ownership of files created are determined by the group of the user who invoked sudo.
