@@ -52,7 +52,7 @@ jobs:
         run: ansible-galaxy collection install community.general community.postgresql
 
       - name: start docker
-        run: service docker start
+        run: sudo service docker start
 
       - name: Run molecule tests
         run: molecule test
