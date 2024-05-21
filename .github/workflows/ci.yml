@@ -51,8 +51,8 @@ jobs:
       - name: Install Ansible dependencies
         run: ansible-galaxy collection install community.general community.postgresql
 
-      - name: start docker
-        run: sudo service docker start
+      # - name: start docker
+      #   run: sudo service docker start
 
       - name: Run molecule tests
         run: molecule test
