@@ -56,11 +56,17 @@ jobs:
       - name: pull docker image
         run: docker pull ghcr.io/miarec/ubuntu2204-systemd:latest
 
+      # - name: run docker image
+      #   run: docker run --name instance -d --privileged -v /sys/fs/cgroup:/sys/fs/cgroup:rw ghcr.io/miarec/ubuntu2204-systemd
+
       - name: run docker image
-        run: docker run --name instance -d --privileged -v /sys/fs/cgroup:/sys/fs/cgroup:rw ghcr.io/miarec/ubuntu2204-systemd
+        run: docker run --name instance -d ghcr.io/miarec/ubuntu2204-systemd
 
       - name: access container
-        run: docker exec instance systemctl status
+        run: docker ps
+
+      - name: access container
+        run: docker exec instance uname -a
 
       # - name: reload docker
       #   run: sudo service docker reload
