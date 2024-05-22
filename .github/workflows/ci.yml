@@ -55,7 +55,7 @@ jobs:
         run: sudo service docker start
 
       - name: start docker
-        run: docker info
+        run: docker run hello-world
 
       - name: Run molecule tests
         run: molecule test
