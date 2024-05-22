@@ -44,6 +44,7 @@ jobs:
       - name: Set up Python3
         uses: actions/setup-python@v5
         with:
+          # python-version: '3.x'
           python-version: '3.10'
 
       - name: Install test dependencies
@@ -52,14 +53,14 @@ jobs:
       - name: Install Ansible dependencies
         run: ansible-galaxy collection install community.general community.postgresql
 
-      # - name: user?
-      #   run: groups
+      - name: pull docker image
+        run: docker pull ghcr.io/miarec/ubuntu2204-systemd:latest
 
-      # - name: docker daemon.json
-      #   run: sudo ls -l /etc/docker/daemon.json
+      - name: run docker image
+        run: docker run --name instance -d --privileged -v /sys/fs/cgroup:/sys/fs/cgroup:rw ghcr.io/miarec/ubuntu2204-systemd
 
-      # - name: cat docker daemon.json
-      #   run: cat /etc/docker/daemon.json
+      - name: access container
+        run: docker exec instance systemctl status
 
       # - name: reload docker
       #   run: sudo service docker reload
@@ -70,8 +71,8 @@ jobs:
       # - name: docker daemon.json
       #   run: sudo ls -l /var/run/docker.sock
 
-      - name: molecule
-        run: molecule --debug create
+      # - name: molecule
+      #   run: molecule --debug create
 
       # - name: molecule
       #   run: molecule --version
