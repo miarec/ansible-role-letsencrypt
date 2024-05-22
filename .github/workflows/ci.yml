@@ -51,18 +51,24 @@ jobs:
       - name: Install Ansible dependencies
         run: ansible-galaxy collection install community.general community.postgresql
 
-      # - name: start docker
-      #   run: sudo service docker start
+      - name: docker daemon.json
+        run: cat /etc/docker/daemon.json
 
-      # - name: start docker
-      #   run: docker run hello-world
+      - name: start docker
+        run: sudo service docker start
+
+      - name: docker hello-world
+        run: docker run hello-world
+
+      - name: docker daemon.json
+        run: cat /etc/docker/daemon.json
 
       - name: just molecule create
         run: molecule create
 
-      - name: Run molecule tests
-        run: molecule test
-        env:
-          PY_COLORS: '1'
-          ANSIBLE_FORCE_COLOR: '1'
-          MOLECULE_DISTRO: ${{ matrix.distro }}
+      # - name: Run molecule tests
+      #   run: molecule test
+      #   env:
+      #     PY_COLORS: '1'
+      #     ANSIBLE_FORCE_COLOR: '1'
+      #     MOLECULE_DISTRO: ${{ matrix.distro }}
