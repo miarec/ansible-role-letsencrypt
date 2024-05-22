@@ -60,7 +60,7 @@ jobs:
       #   run: docker run --name instance -d --privileged -v /sys/fs/cgroup:/sys/fs/cgroup:rw ghcr.io/miarec/ubuntu2204-systemd
 
       - name: run docker image
-        run: docker run --name instance -d ghcr.io/miarec/ubuntu2204-systemd
+        run: docker run --name instance -d -t ghcr.io/miarec/ubuntu2204-systemd
 
       - name: access container
         run: docker ps
