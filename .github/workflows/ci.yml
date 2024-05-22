@@ -52,26 +52,29 @@ jobs:
       - name: Install Ansible dependencies
         run: ansible-galaxy collection install community.general community.postgresql
 
-      - name: user?
-        run: groups
+      # - name: user?
+      #   run: groups
 
-      - name: docker daemon.json
-        run: sudo ls -l /etc/docker/daemon.json
+      # - name: docker daemon.json
+      #   run: sudo ls -l /etc/docker/daemon.json
 
-      - name: cat docker daemon.json
-        run: cat /etc/docker/daemon.json
+      # - name: cat docker daemon.json
+      #   run: cat /etc/docker/daemon.json
 
       # - name: reload docker
       #   run: sudo service docker reload
 
-      - name: docker hello-world
-        run: docker run hello-world
+      # - name: docker hello-world
+      #   run: docker run hello-world
 
       # - name: docker daemon.json
       #   run: sudo ls -l /var/run/docker.sock
 
-      - name: molecule driver
-        run: molecule driver
+      - name: molecule
+        run: molecule --help
+
+      - name: molecule
+        run: molecule --version
 
       # - name: Run molecule tests
       #   run: molecule test
