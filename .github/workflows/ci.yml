@@ -51,14 +51,14 @@ jobs:
       - name: Install Ansible dependencies
         run: ansible-galaxy collection install community.general community.postgresql
 
-      - name: user?
-        run: groups
+      # - name: user?
+      #   run: groups
 
       - name: docker daemon.json
-        run: sudo chown runner:docker /var/run/docker.sock
+        run: sudo ls -l /etc/docker/daemon.json
 
-      # - name: modify docker daemon.json
-      #   run: sudo echo "{}" >> /etc/docker/daemon.json
+      - name: cat docker daemon.json
+        run: cat /etc/docker/daemon.json
 
       # - name: reload docker
       #   run: sudo service docker reload
@@ -69,8 +69,8 @@ jobs:
       # - name: docker daemon.json
       #   run: sudo ls -l /var/run/docker.sock
 
-      - name: molecule create
-        run: molecule create
+      # - name: molecule create
+      #   run: molecule create
 
       # - name: Run molecule tests
       #   run: molecule test
