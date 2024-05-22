@@ -54,11 +54,11 @@ jobs:
       # - name: user?
       #   run: groups
 
-      - name: docker daemon.json
-        run: sudo ls -l /etc/docker/daemon.json
+      # - name: docker daemon.json
+      #   run: sudo ls -l /etc/docker/daemon.json
 
-      - name: cat docker daemon.json
-        run: cat /etc/docker/daemon.json
+      # - name: cat docker daemon.json
+      #   run: cat /etc/docker/daemon.json
 
       # - name: reload docker
       #   run: sudo service docker reload
@@ -69,8 +69,8 @@ jobs:
       # - name: docker daemon.json
       #   run: sudo ls -l /var/run/docker.sock
 
-      # - name: molecule create
-      #   run: molecule create
+      - name: molecule create
+        run: molecule create
 
       # - name: Run molecule tests
       #   run: molecule test
