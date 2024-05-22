@@ -52,19 +52,22 @@ jobs:
         run: ansible-galaxy collection install community.general community.postgresql
 
       - name: docker daemon.json
-        run: cat /etc/docker/daemon.json
+        run: sudo ls -l /var/run/docker.sock
 
-      - name: start docker
-        run: sudo service docker status
+      - name: docker daemon.json
+        run: echo "{}" >> /etc/docker/daemon.json
+
+      - name: reload docker
+        run: sudo service docker reload
 
       - name: docker hello-world
         run: docker run hello-world
 
-      # - name: docker daemon.json
-      #   run: cat /etc/docker/daemon.json
+      - name: docker daemon.json
+        run: sudo ls -l /var/run/docker.sock
 
-      - name: just molecule create
-        run: sudo molecule create
+      - name: molecule create
+        run: molecule create
 
       # - name: Run molecule tests
       #   run: molecule test
