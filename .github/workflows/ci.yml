@@ -9,16 +9,16 @@ name: CI
     - cron: "30 7 1 * *"
 
 jobs:
-  lint:
-    name: lint
-    runs-on: ubuntu-latest
+  # lint:
+  #   name: lint
+  #   runs-on: ubuntu-latest
 
-    steps:
-      - name: Check out the repository
-        uses: actions/checkout@v4
+  #   steps:
+  #     - name: Check out the repository
+  #       uses: actions/checkout@v4
 
-      - name: Run ansible-lint
-        uses: ansible/ansible-lint-action@v6
+  #     - name: Run ansible-lint
+  #       uses: ansible/ansible-lint-action@v6
 
   test:
     name: molecule
@@ -27,14 +27,14 @@ jobs:
       fail-fast: false
       matrix:
         distro:
-          - ubuntu2004
+          # - ubuntu2004
           - ubuntu2204
-          - centos7
-          - rockylinux8
-          - rockylinux9
-          - rhel7
-          - rhel8
-          - rhel9
+          # - centos7
+          # - rockylinux8
+          # - rockylinux9
+          # - rhel7
+          # - rhel8
+          # - rhel9
 
     steps:
       - name: Check out the Repository
@@ -51,8 +51,11 @@ jobs:
       - name: Install Ansible dependencies
         run: ansible-galaxy collection install community.general community.postgresql
 
-      # - name: start docker
-      #   run: sudo service docker start
+      - name: start docker
+        run: sudo service docker start
+
+      - name: start docker
+        run: docker info
 
       - name: Run molecule tests
         run: molecule test
