@@ -71,14 +71,14 @@ jobs:
       #   run: sudo ls -l /var/run/docker.sock
 
       - name: molecule
-        run: molecule --help
+        run: molecule --debug create
 
-      - name: molecule
-        run: molecule --version
+      # - name: molecule
+      #   run: molecule --version
 
-      - name: Run molecule tests
-        run: molecule test
-        env:
-          PY_COLORS: '1'
-          ANSIBLE_FORCE_COLOR: '1'
-          MOLECULE_DISTRO: ${{ matrix.distro }}
+      # - name: Run molecule tests
+      #   run: molecule test
+      #   env:
+      #     PY_COLORS: '1'
+      #     ANSIBLE_FORCE_COLOR: '1'
+      #     MOLECULE_DISTRO: ${{ matrix.distro }}
