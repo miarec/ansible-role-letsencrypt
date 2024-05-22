@@ -70,8 +70,8 @@ jobs:
       # - name: docker daemon.json
       #   run: sudo ls -l /var/run/docker.sock
 
-      - name: molecule create
-        run: molecule --debug create
+      - name: molecule driver
+        run: molecule driver
 
       # - name: Run molecule tests
       #   run: molecule test
