@@ -55,16 +55,16 @@ jobs:
         run: cat /etc/docker/daemon.json
 
       - name: start docker
-        run: sudo service docker start
+        run: sudo service docker status
 
       - name: docker hello-world
         run: docker run hello-world
 
-      - name: docker daemon.json
-        run: cat /etc/docker/daemon.json
+      # - name: docker daemon.json
+      #   run: cat /etc/docker/daemon.json
 
       - name: just molecule create
-        run: molecule create
+        run: sudo molecule create
 
       # - name: Run molecule tests
       #   run: molecule test
