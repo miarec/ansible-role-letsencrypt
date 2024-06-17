@@ -5,6 +5,8 @@ name: CI
   push:
     branches:
       - master
+  schedule:
+    - cron: "30 7 1 * *"
 
 jobs:
   lint:
@@ -27,6 +29,7 @@ jobs:
         distro:
           - ubuntu2004
           - ubuntu2204
+          - ubuntu2404
           - centos7
           - rockylinux8
           - rockylinux9
@@ -47,7 +50,7 @@ jobs:
         run: pip3 install -r molecule/default/test-requirements.txt
 
       - name: Install Ansible dependencies
-        run: ansible-galaxy collection install community.general community.postgresql
+        run: ansible-galaxy collection install community.docker ansible.posix --force
 
       - name: Run molecule tests
         run: molecule test
