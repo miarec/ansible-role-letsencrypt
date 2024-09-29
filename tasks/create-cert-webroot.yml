@@ -12,7 +12,7 @@
     -w /var/www/html/
     --noninteractive
     --agree-tos
-    --email {{ certbot_email }}
+    {{ '--email ' + certbot_email if certbot_email else '--register-unsafely-without-email' }}
     -d {{ item.item }}
   loop: "{{ _letsencrypt_certs.results }}"
   when: not item.stat.exists
