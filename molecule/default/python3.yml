@@ -1,0 +1,66 @@
+---
+- name: Install Python3.8 | CentOS/RHEL 7
+  when:
+    - ansible_os_family == "RedHat"
+    - ansible_distribution_major_version == "7"
+  block:
+
+    - name: Prepare | Install centos-release-scl-rh repository | CentOS
+      yum:
+        name: centos-release-scl-rh
+        state: present
+      when: ansible_distribution == "CentOS"
+
+    - name: Prepare | Install Python3.8 packages | CentOS/RHEL 7
+      yum:
+        name: "{{ item }}"
+        state: present
+      with_items:
+        - rh-python38-python
+        - rh-python38-python-devel
+
+    - name: Prepare | Create Symbolic link | CentOS/RHEL 7
+      file:
+        src: /opt/rh/rh-python38/root/usr/bin/python3.8
+        dest: /usr/bin/python3
+        state: link
+
+- name: Prepare | Install Python3.8 or later | Rocky/RHEL 8+
+  when:
+    - ansible_os_family == "RedHat"
+    - ansible_distribution_major_version >= "8"
+  block:
+
+    - set_fact:
+        _python_packages:
+          - python38
+          - python38-devel
+      when: ansible_distribution_major_version == "8"
+
+    - set_fact:
+        _python_packages:
+          - python3
+          - python3-devel
+      when: ansible_distribution_major_version == "9"
+
+    - name: Prepare | Install Python 3.8 or later | Rocky/RHEL 8+
+      package:
+        name: "{{ item }}"
+        state: present
+      with_items:
+        - "{{ _python_packages }}"
+
+- name: Prepare | Install Python3.8 or later | Debian
+  when:
+    - ansible_os_family == "Debian"
+  block:
+
+    - name: Prepare | Install Python 3.8 or later | Debian
+      package:
+        name: "{{ item }}"
+        state: present
+      with_items:
+        - python3
+        - python3-dev
+        - python3-packaging
+        - python3-venv

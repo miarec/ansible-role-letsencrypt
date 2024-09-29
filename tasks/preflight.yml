@@ -10,14 +10,14 @@
 - name: Check for certbot_domains/certbot_domain variable (1).
   fail:
     msg: Either parameter 'certbot_domains' or 'certbot_domain' must be provided.
-  when: 
+  when:
     - certbot_domains is not defined
     - certbot_domain is not defined
 
 - name: Check for certbot_domains/certbot_domain variable (2)
   fail:
     msg: Only one of 'certbot_domains' or 'certbot_domain' must be provided, not both
-  when: 
+  when:
     - certbot_domains is defined
     - certbot_domain is defined
 
