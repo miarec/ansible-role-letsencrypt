@@ -9,7 +9,6 @@
   command: >-
       {{ certbot_script }} certonly
       --dns-route53
-      --dns-route53-propagation-seconds 30
       --noninteractive
       --agree-tos
       --email {{ certbot_email }}
