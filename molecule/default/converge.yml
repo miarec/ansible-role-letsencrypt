@@ -8,11 +8,6 @@
     certbot_method: none
     certbot_configure_apache: false
 
-  pre_tasks:
-    - set_fact:
-        ansible_python_interpreter: python3
-      when: ansible_distribution == "CentOS"
-
   roles:
     - role: ansible-role-letsencrypt
       tags:

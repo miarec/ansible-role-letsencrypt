@@ -1,10 +1,12 @@
 ---
 dependency:
   name: galaxy
+  options:
+    requirements-file: collections.yml
 driver:
   name: docker
 platforms:
-  - name: instance
+  - name: ansible-role-letsencrypt
     image: ghcr.io/miarec/${MOLECULE_DISTRO:-ubuntu2404}-systemd:latest
     command: ${MOLECULE_DOCKER_COMMAND:-""}
     volumes:
@@ -16,6 +18,7 @@ provisioner:
   name: ansible
   env:
     ANSIBLE_VERBOSITY: ${MOLECULE_ANSIBLE_VERBOSITY:-0}
+    ANSIBLE_ROLES_PATH: ${MOLECULE_PROJECT_DIRECTORY}/../
   playbooks:
     converge: ${MOLECULE_PLAYBOOK:-converge.yml}
 verifier:

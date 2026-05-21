@@ -1,4 +1,15 @@
 ---
+- name: Enable CRB repo | RockyLinux 9
+  ini_file:
+    dest: /etc/yum.repos.d/rocky.repo
+    section: crb
+    option: enabled
+    value: 1
+    mode: "0644"
+  when:
+    - ansible_facts['distribution'] == "Rocky"
+    - ansible_facts['distribution_major_version'] == "9"
+
 - name: Install package dependencies.
   package:
     name: "{{ item }}"
@@ -30,7 +41,7 @@
       lineinfile:
         line: "{{ certbot_user }} ALL= NOPASSWD: {{ certbot_apachectl_path }}"
         dest: "/etc/sudoers.d/{{ certbot_user }}"
-        mode: 0440
+        mode: "0440"
         create: true
         validate: /usr/sbin/visudo -cf %s
 
@@ -40,7 +51,7 @@
     state: directory
     owner: "{{ certbot_user }}"
     group: "{{ certbot_group }}"
-    mode: 0755
+    mode: "0755"
     recurse: true
   with_items:
     - "{{ cerbot_work_dir }}"

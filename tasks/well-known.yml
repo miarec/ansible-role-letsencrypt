@@ -25,5 +25,5 @@
   template:
     src: "apache-{{ apache_version_base }}-letsencrypt-well-known.conf.j2"
     dest: "{{ apache_conf_path }}/letsencrypt-well-known.conf"
-    mode: 0644
+    mode: "0644"
   notify: Reload apache
