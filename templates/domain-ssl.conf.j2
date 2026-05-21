@@ -24,7 +24,7 @@
     # On Debian there is no symlink like that, but there is a defined variable ${APACHE_LOG_DIR}
     # which points to /var/log/apache
 
-    {% if ansible_os_family == "RedHat" -%}
+    {% if ansible_facts['os_family'] == "RedHat" -%}
 
     ErrorLog "logs/{{ item }}_ssl_error.log"
     TransferLog "logs/{{ item }}_ssl_access.log"

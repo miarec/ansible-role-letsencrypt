@@ -1,6 +1,9 @@
 ---
 dependencies:
  - libaugeas0
+ - libaugeas-dev
+ - gcc
+ - python3-dev
  - cron
  - acl  # this is required to set permissions on temp files
 
